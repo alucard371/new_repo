@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Le Louvre!{% endblock %}</title>
+
+        {% block stylesheets %}
+            {% include('assets/stylesheet.html.twig') %}
+        {% endblock %}
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+        {% block nav %}
+            {% include('nav/nav.html.twig') %}
+        {% endblock %}
+        {% block content %}{% endblock %}
+        {% block javascripts %}
+            {% include ('assets/javascript.html.twig') %}
+        {% endblock %}
+    </body>
+</html>

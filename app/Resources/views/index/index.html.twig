@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    {{ form_start(form) }}
+    {# render the task's only field: description #}
+    {{ form_row(form.email) }}
+
+    <h3>Billets</h3>
+    <ul class="billets" data-prototype="{{ form_widget(form.billets.vars.prototype)|e('html_attr') }}">
+        {% for billet in form.billets %}
+            <li class="list-unstyled">{{ form_widget(form) }}</li>
+        {% endfor %}
+
+    </ul>
+    <button type="submit" class="btn btn-default">valider</button>
+    {{ form_end(form) }}
+    <li class="list-unstyled">{{ user.email }}</li>
+    <li class="list-unstyled">{{ user.id }}</li>
+
+    <div class="container">
+        <div class="row">
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' class="form-control" />
+                        <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+   {{ parent() }}
+
+{% endblock %}
