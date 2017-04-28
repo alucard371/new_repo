@@ -1,7 +1,3 @@
-/**
- * Created by moi on 02/03/2017.
- */
-
 var $collectionHolder;
 
 // setup an "add a ticket" link

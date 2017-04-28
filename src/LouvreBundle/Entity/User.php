@@ -71,11 +71,11 @@ class User
                     $tarif = 'gratuit';
                     $montant = 0;
                     break;
-                case ($age>=4 && $age<12):
+                case ($age>=4 && $age <= 12):
                     $tarif = 'enfant';
                     $montant = 8;
                     break;
-                case ($age >= 12 && $age < 60):
+                case ($age > 12 && $age < 60):
                     $tarif = 'normal';
                     $montant = 16;
                     break;

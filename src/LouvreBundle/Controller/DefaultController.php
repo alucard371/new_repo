@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+
 use Stripe\Stripe;
 
 
@@ -17,12 +18,14 @@ class DefaultController extends Controller
     /**
      * @Route("/")
      * @Template("index/index.html.twig")
+     * @param Request $request
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function indexAction(Request $request)
     {
         $user = new User();
         $billet = new Billet();
-        
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
@@ -31,6 +34,7 @@ class DefaultController extends Controller
             $user->addBillets($user->getBillets());
             $em->persist($user);
             $em->flush();
+
         }
 
         return array(
