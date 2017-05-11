@@ -11,3 +11,11 @@ services:
   add_tickets:
           class: LouvreBundle\Services\AddTickets
           arguments: ["@doctrine.orm.entity_manager", "@form.factory", "@session"]
+
+  modify_order:
+          class: LouvreBundle\Services\modifyOrder
+          arguments: ["@session"]
+
+  final_order:
+          class: LouvreBundle\Services\finalOrder
+          arguments: ["doctrine.orm.entity_manager", "@session"]

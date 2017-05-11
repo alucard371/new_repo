@@ -37,8 +37,31 @@ class User
      */
     protected $billets;
 
+    /**
+     * @ORM\Column(name="Total", type="integer")
+     */
+    protected $total;
 
+    /**
+     * @param $billets
+     * @return int
+     */
+    public function getTotal ($billets)
+    {
+        $total = 0;
+        foreach ( $billets as $billet) {
+            $total = $total + $billet->getMontant();
+        }
+        return $total;
+    }
 
+    /**
+     * @param mixed $total
+     */
+    public function setTotal ($total)
+    {
+        $this->total = $total;
+    }
 
 
 
@@ -65,31 +88,39 @@ class User
         foreach ( $billets as $billet) {
             $visitorBirth = $billet->getBirthdate();
             $visitorVenue = $billet->getDateDeVenue();
-            $age = $visitorVenue->diff($visitorBirth)->y;
-            switch ($age) {
-                case ($age<4):
-                    $tarif = 'gratuit';
-                    $montant = 0;
-                    break;
-                case ($age>=4 && $age <= 12):
-                    $tarif = 'enfant';
-                    $montant = 8;
-                    break;
-                case ($age > 12 && $age < 60):
-                    $tarif = 'normal';
-                    $montant = 16;
-                    break;
-                case ($age >= 60):
-                    $tarif = 'senior';
-                    $montant = 12;
-                    break;
+            $heureDeVenue = $billet->getHeureDeVenue();
+            $tarifReduit  = $billet->isTarifReduit();
+
+            if ($tarifReduit == true)
+            {
+                $tarif = 'réduit';
+                $montant = 10;
+            }
+            else
+            {
+                $age = $visitorVenue->diff($visitorBirth)->y;
+                switch ($age) {
+                    case ($age<4):
+                        $tarif = 'gratuit';
+                        $montant = 0;
+                        break;
+                    case ($age>=4 && $age <= 12):
+                        $tarif = 'enfant';
+                        $montant = 8;
+                        break;
+                    case ($age > 12 && $age < 60):
+                        $tarif = 'normal';
+                        $montant = 16;
+                        break;
+                    case ($age >= 60):
+                        $tarif = 'senior';
+                        $montant = 12;
+                        break;
+                }
             }
 
-            if ($visitorVenue->format('D') == 'tue'){
-                echo "choississez un autre jour";
-            }
 
-            if ($visitorVenue->format('H') >= 14){
+            if ($heureDeVenue->format('H') >= 14){
                 $demiJournee = true;
                 $montant = $montant/2;
             }

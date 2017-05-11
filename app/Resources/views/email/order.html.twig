@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+
+{% block content %}
+{# app/Resources/views/Emails/registration.html.twig #}
+<h3>You did it! You ordered!</h3>
+
+Hi {{ email }}! You're successfully registered.
+
+The total is {{ total }}
+
+{# example, assuming you have a route named "login" #}
+To login, go to: <a href="{{ url('home') }}">...</a>.
+
+Thanks!
+{% endblock %}

@@ -31,6 +31,13 @@ class Billet
     private $tarif;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="tarif_reduit", type="boolean")
+     */
+    private $tarifReduit;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="nom", type="string", length=255)
@@ -69,9 +76,15 @@ class Billet
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="dateDeVenue", type="datetime")
+     * @ORM\Column(name="dateDeVenue", type="date")
      */
     private $dateDeVenue;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="heure_de_venue", type="datetime")
+     */
+    private $heureDeVenue;
 
     /**
      * @var integer
@@ -113,6 +126,23 @@ class Billet
     {
         $this->tarif = $tarif;
     }
+
+    /**
+     * @return bool
+     */
+    public function isTarifReduit ()
+    {
+        return $this->tarifReduit;
+    }
+
+    /**
+     * @param bool $tarifReduit
+     */
+    public function setTarifReduit ($tarifReduit)
+    {
+        $this->tarifReduit = $tarifReduit;
+    }
+
 
     /**
      * Set nom
@@ -291,5 +321,23 @@ class Billet
     {
         $this->user = $user;
     }
+
+    /**
+     * @return \DateTime
+     */
+    public function getHeureDeVenue ()
+    {
+        return $this->heureDeVenue;
+    }
+
+    /**
+     * @param \DateTime $heureDeVenue
+     */
+    public function setHeureDeVenue (\DateTime $heureDeVenue)
+    {
+        $this->heureDeVenue = $heureDeVenue;
+    }
+
+
 
 }

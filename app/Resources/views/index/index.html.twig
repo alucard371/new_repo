@@ -1,6 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+
+    {% for clear in app.session.flashbag.get('clear') %}
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h3>{{ clear }}</h3>
+        </div>
+    {% endfor %}
+
     {{ form_start(form) }}
     {# render the task's only field: description #}
     {{ form_row(form.email) }}
@@ -10,14 +20,10 @@
         {% for billet in form.billets %}
             <li class="list-unstyled">{{ form_widget(form) }}</li>
         {% endfor %}
-
     </ul>
     <button type="submit" class="btn btn-default">valider</button>
 
     {{ form_end(form) }}
-    <li class="list-unstyled">{{ user.email }}</li>
-    <li class="list-unstyled">{{ user.id }}</li>
-
 
 {% endblock %}
 

@@ -69,7 +69,7 @@ class Requirement
     /**
      * Returns the message for testing the requirement.
      *
-     * @return string The test message
+     * @return string The recapitulatif message
      */
     public function getTestMessage()
     {

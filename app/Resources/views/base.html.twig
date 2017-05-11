@@ -13,9 +13,27 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
+
+
         {% block nav %}
             {% include('nav/nav.html.twig') %}
         {% endblock %}
+        {% if app.session.flashBag.has('payment') %}
+            <div class="alert alert-success alert-dismissable fade in">
+                {% for msg in app.session.flashBag.get('payment') %}
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {{ msg }}
+                {% endfor %}
+            </div>
+        {% elseif app.session.flashBag.has('error')%}
+            <div class="alert alert-warning alert-dismissable fade in">
+                {% for msg in app.session.flashBag.get('error') %}
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {{ msg | nl2br }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {% block content %}{% endblock %}
         {% block javascripts %}
             {% include ('assets/javascript.html.twig') %}

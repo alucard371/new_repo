@@ -1,9 +1,3 @@
-/**
- * Created by moi on 02/03/2017.
- */
-
-
-
 var handler = StripeCheckout.configure({
     key: 'pk_test_WGfmYvVcELpspLen981CmEbn',
     image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
@@ -21,8 +15,7 @@ document.getElementById('customButton').addEventListener('click', function(e) {
         name: 'Le Louvre',
         description: 'Paiement',
         zipCode: true,
-        currency: 'eur',
-        amount: 200000
+        currency: 'eur'
     });
     e.preventDefault();
 });

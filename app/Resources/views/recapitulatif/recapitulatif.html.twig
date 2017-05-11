@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+<h1 class="text-center">Récapitulatif de la commande</h1>
+
+
+<h2 class="text-center">E-mail de la personne qui passe la commande : {{ order.email }}</h2>
+    <div class="container">
+        {% for billet in order.billets %}
+            <div class="col-xs-6 col-lg-3 col-md-4 col-sm-6 panel panel-primary">
+                <div class="panel-heading"><p>Nom du visiteur :  {{ billet.nom }}</p></div><br>
+                Prenom du visiteur : <div>{{ billet.prenom }}</div><br>
+                <div>{{ billet.pays }}</div><br>
+                {% if  billet.demiJournee == true %}
+                    <div><p>Vous bénéficiez du tarif demi-journée.</p></div><br>
+                {% else %}
+                    <div><p>Tarif journée</p></div><br>
+                {% endif %}
+                <div>{{ billet.tarif }}</div><br>
+                <div>{{ billet.birthdate|date("d/m/Y") }}</div><br>
+                <div>{{ billet.dateDeVenue|date("d/m/Y") }}</div><br>
+                <div>{{ billet.heureDeVenue|date("H:i") }}</div><br>
+                <div class="panel-footer panel-primary">Montant : {{ billet.montant }}</div>
+            </div>
+
+        {% endfor %}
+    </div>
+    <div class="container">
+        {% set grandTotal = 0 %}
+        {% set billetTotal = 0 %}
+        {% for billet in order.billets %}
+            {% set grandTotal = grandTotal + billet.montant %}
+            {% set billetTotal = billetTotal +1 %}
+        {% endfor %}
+
+        <h1>Total de la commande : {{ grandTotal }} euros</h1><br>
+        <h2>Nombre de billet : {{ billetTotal }}</h2>
+        <div>
+            <p class="text-center"><a href="{{ path('paiement') }}"><button class="btn btn-primary">Accédez au paiement</button></a></p>
+            <p class="text-center"><button type="button" class="btn btn-danger" title="Delete_order" data-toggle="modal" data-target="#orderDialog">Annuler la commande</button></p>
+        </div>
+            <div class="modal fade" id="orderDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+                        </div>
+                        <div class="modal-body">
+                            Confirmez la suppression
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                            <a href="{{ path('clear_order', { 'order': order }) }}"><button class="btn btn-warning">Annuler la commande</button></a>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </div>
+        <div class="text-center"><h5>Attention:</h5><p>Le tarif réduit est octroyé sous reserve de présentation d'un justificatif (étudiant, employé de musée, Ministère de la culture, militaire, ...)</p></div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}

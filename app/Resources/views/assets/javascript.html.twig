@@ -3,12 +3,20 @@
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script src="https://checkout.stripe.com/checkout.js"></script>
 <script src="{{ asset('js/addTicketLink.js') }}"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.min.js"></script>
+<script src="{{ asset('js/bootstrap-datepicker-1.6.4-dist/js/bootstrap-datepicker.js') }}"></script>
 <script>
-    jQuery(document).ready(function () {
-        $('.js-datepicker').datepicker({
-            format: 'mm/dd/yyyy',
-            startDate: '0d'
+    $(document).ready(function () {
+        $('.birthdate').datepicker({
+            format: 'dd/mm/yyyy'
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('.dateDeVenue').datepicker({
+            format: 'dd/mm/yyyy',
+            startDate: '-0d',
+            daysOfWeeKDisabled: '0'
         });
     });
 </script>
