@@ -24,17 +24,30 @@ class BilletType extends AbstractType
             ->add('pays')
             ->add('birthdate', DateType::class, array(
                 'widget' => 'single_text',
+                'format' => 'dd-MM-yyyy',
                 'html5' => false,
                 'attr' => [
-                    'class' => 'birthdate',
-                    'data-provide' => 'datepicker']
+                    'class'                 => 'birthdate',
+                    'data-provide'          => 'datepicker',
+                    'data-date-format'      => "dd/mm/yyyy",
+                'data-date-language'        => "fr"]
+
             ))
             ->add('dateDeVenue', DateType::class, array(
                 'widget' => 'single_text',
+                'format' => 'dd-MM-yyyy',
                 'html5' => false,
                 'attr' => [
-                    'class' => 'dateDeVenue',
-                    'data-provide' => 'datepicker']
+                    'class'                             => 'dateDeVenue',
+                    'data-provide'                      => 'datepicker',
+                    'data-date-language'                => 'fr',
+                    'data-date-format'                  => 'dd/mm/yyyy',
+                    'data-date-start-date'              => '+Od',
+                    'data-date-days-of-week-disabled'   => '0',
+                    'data-date-clear-btn'               => true,
+                    'data-date-today-highlight'         => true,
+                    'data-date-dates-disabled'          => '25/12/2017','01/05/2018', '01/11/2017'
+                    ]
             ))
             ->add('heureDeVenue', TimeType::class, array(
                 'html5'     => true,

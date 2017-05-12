@@ -4,26 +4,14 @@
 <script src="https://checkout.stripe.com/checkout.js"></script>
 <script src="{{ asset('js/addTicketLink.js') }}"></script>
 <script src="{{ asset('js/bootstrap-datepicker-1.6.4-dist/js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ asset('js/bootstrap-datepicker-1.6.4-dist/locales/bootstrap-datepicker.fr.min.js') }}"></script>
+
 <script>
     $(document).ready(function () {
         $('.birthdate').datepicker({
-            format: 'dd/mm/yyyy',
-            language: "fr",
-            todayHighlight: true
         });
 
-        $('.datepicker').datepicker({
-            format: 'dd/mm/yyyy',
-            language: "fr",
-            startDate: '+0d',
-            daysOfWeeKDisabled: '0',
-            datesDisabled: [
-                '01/05/2017',
-                '01/11/2017',
-                '25/12/2017'
-            ],
-            todayHighlight: true,
-            clearBtn: true
+        $('.dateDeVenue').datepicker({
         });
     });
 </script>

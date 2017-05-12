@@ -2,7 +2,6 @@
 
 namespace LouvreBundle\Controller;
 
-use Doctrine\ORM\EntityManager;
 use LouvreBundle\Entity\Billet;
 use LouvreBundle\Entity\User;
 use LouvreBundle\Form\UserType;
@@ -17,10 +16,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="home")
-     * @Template("index/index.html.twig")
      * @param Request $request
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
@@ -33,22 +30,19 @@ class DefaultController extends Controller
         {
             $user->addBillets($user->getBillets());
             $session->set('order', $user );
-            return $this->redirectToRoute('recapitulatif');
+            return $this->redirectToRoute('Recapitulatif');
         }
-        dump($user);
-        dump($session);
-        return array(
+
+        return $this->render('index/index.html.twig',array(
             'form' => $form->createView(),
             'user' => $user,
             'billet' => $billet,
-        );
+        ));
     }
 
     /**
-     * @Template("recapitulatif/recapitulatif.html.twig")
      * @param Request $request
-     * @Route("/recapitulatif", name="recapitulatif")
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function recapAction (Request $request)
     {
@@ -97,49 +91,19 @@ class DefaultController extends Controller
 
                 $this->get('mailer')->send($message);
                 $request->getSession()->clear();
+                $this->generateUrl('Accueil');
                 $this->addFlash('payment', 'Votre paiement de ' . $orderTotal . ' euros est accepté.');
-                $this->redirectToRoute('home');
+
 
             } catch (\Stripe\Error\Card $e) {
                 $this->addFlash('fail', 'Votre paiement de ' . $orderTotal . ' euros n\' est pas accepté.');
-                // Since it's a decline, \Stripe\Error\Card will be caught
-                $body = $e->getJsonBody();
-                $err = $body['error'];
-                $this->addFlash('error',
-                    'Code status : ' . $e->getHttpStatus() . "\n".
-                    'Le type d\'erreur est : ' . $err['type'] . "\n".
-                    'Le code d\'erreur est : ' . $err['code'] . "\n".
-                    'Le message d\'erreur est : ' . $err['message']);
-
-            } catch (\Stripe\Error\RateLimit $e) {
-                // Too many requests made to the API too quickly
-                print('Too many requests made to the API too quickly');
-            } catch (\Stripe\Error\InvalidRequest $e) {
-                // Invalid parameters were supplied to Stripe's API
-                print ('Invalid parameters were supplied to Stripe\'s API');
-            } catch (\Stripe\Error\Authentication $e) {
-                // Authentication with Stripe's API failed
-                print('Authentication with Stripe\'s API failed');
-                // (maybe you changed API keys recently)
-            } catch (\Stripe\Error\ApiConnection $e) {
-                // Network communication with Stripe failed
-                print ('Network communication with Stripe failed');
-            } catch (\Stripe\Error\Base $e) {
-                // Display a very generic error to the user, and maybe send
-                // yourself an email
-                print ('Display a very generic error to the user');
-            } catch (Exception $e) {
-                // Something else happened, completely unrelated to Stripe
-                print ('Something else happened, completely unrelated to Stripe');
             }
         }
 
-        $order =$session->get('order');
-
-        return array(
+        return $this->render('recapitulatif/recapitulatif.html.twig',array(
             'order' => $user,
             'sum' => $sum
-        );
+        ));
     }
 
     /**
@@ -150,6 +114,6 @@ class DefaultController extends Controller
     public function clearOrder (Request $request)
     {
         $clearOrder = $this->get('modify_order')->clearOrder($request);
-        Return $this->redirectToRoute('home', array('clearOrder', $clearOrder));
+        Return $this->redirectToRoute('Accueil', array('clearOrder', $clearOrder));
     }
 }

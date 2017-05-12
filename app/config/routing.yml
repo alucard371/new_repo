@@ -2,3 +2,11 @@ louvre:
     resource: "@LouvreBundle/Controller/"
     type:     annotation
     prefix:   /
+
+Accueil:
+    path:     /
+    defaults: {_controller: LouvreBundle:Default:index}
+
+Recapitulatif:
+    path:     /recapitulatif
+    defaults: {_controller: LouvreBundle:Default:recap}
