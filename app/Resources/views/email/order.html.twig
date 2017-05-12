@@ -2,15 +2,21 @@
 
 
 {% block content %}
-{# app/Resources/views/Emails/registration.html.twig #}
-<h3>You did it! You ordered!</h3>
 
-Hi {{ email }}! You're successfully registered.
+<h1>Le musée du Louvre</h1><a href="{{ url('home') }}"><img src="{{ asset('icon/le_louvre.png') }}"></a><br>
 
-The total is {{ total }}
+<h3>Votre commande à bien été effectuée.</h3><br>
 
-{# example, assuming you have a route named "login" #}
-To login, go to: <a href="{{ url('home') }}">...</a>.
+Votre commande à été effectuée le {{ date|date('d-m-Y') }} à {{ date|date('H:i') }}<br>
 
-Thanks!
+Le total de votre commande est de {{ total }}<br>
+
+{% for billet in order.billets %}
+    Nom des visiteurs : {{ billet.nom }}<br>
+    Prénom des visiteurs : {{ billet.prenom }}<br>
+{% endfor %}
+
+Code de réservation :<br>
+
+Merci !<br>
 {% endblock %}

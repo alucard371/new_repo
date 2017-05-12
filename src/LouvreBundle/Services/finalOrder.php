@@ -30,10 +30,10 @@ class finalOrder
         $this->session = $session;
     }
 
-    public function saveOrder (Request $request)
+    public function saveOrder (Request $request, $data )
     {
         $em = $this->get('doctrine')->getManager();
-        $em->persist($user);
+        $em->persist($data);
         $em->flush();
         $request->getSession()->clear();
     }

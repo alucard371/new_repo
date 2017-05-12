@@ -7,16 +7,23 @@
 <script>
     $(document).ready(function () {
         $('.birthdate').datepicker({
-            format: 'dd/mm/yyyy'
-        });
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $('.dateDeVenue').datepicker({
             format: 'dd/mm/yyyy',
-            startDate: '-0d',
-            daysOfWeeKDisabled: '0'
+            language: "fr",
+            todayHighlight: true
+        });
+
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            language: "fr",
+            startDate: '+0d',
+            daysOfWeeKDisabled: '0',
+            datesDisabled: [
+                '01/05/2017',
+                '01/11/2017',
+                '25/12/2017'
+            ],
+            todayHighlight: true,
+            clearBtn: true
         });
     });
 </script>

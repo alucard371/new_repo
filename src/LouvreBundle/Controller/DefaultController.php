@@ -53,56 +53,17 @@ class DefaultController extends Controller
     public function recapAction (Request $request)
     {
         $session = $request->getSession();
-        $order = $session->get('order');
-        dump($session);
-        dump($order);
-        dump($order->getBillets());
-        $billets = $order->getBillets();
-        $sum = $order->getTotal($billets);
-        $order->setTotal($sum);
-        dump($sum);
-        return array(
-            'order' => $order,
-            'sum' => $sum
-        );
-    }
+        $user = $session->get('order');
 
-
-    /**
-     * @Route("/paiement", name="paiement")
-     * @Template("stripe/stripe.html.twig")
-     * @param Request $request
-     * @return array
-     */
-    public function paiement(Request $request)
-    {
-        $session = $request->getSession();
-       $order =$session->get('order');
-       dump($order);
-        return array(
-            'order' => $order,
-        );
-    }
-
-    /**
-     * @Route("/finalisation", name="finalisation")
-     * @Template("paiement/finalisation.html.twig")
-     * @param Request $request
-     * @param EntityManager $em
-     * @return array
-     */
-    public function finalisationAction (Request $request)
-
-    {
-        $session = $request->getSession();
-        $user =$session->get('order');
-        $tokenType = $request->request->get("stripeTokenType");
-        $stripeEmail = $request->request->get("stripeEmail");
         $billets = $user->getBillets();
-        $orderTotal = $user->getTotal($billets);
-        dump($user);
-        dump($request);
+        $sum = $user->getTotal($billets);
+        $user->setTotal($sum);
 
+        $stripeEmail = $request->request->get("stripeEmail");
+
+        $orderTotal = $user->getTotal($billets);
+        $orderDate = new \DateTime('now');
+        $user->setOrderDate($orderDate);
 
         if ($request->isMethod('POST')) {
             try {
@@ -111,15 +72,14 @@ class DefaultController extends Controller
                 Stripe::setApiKey("sk_test_xoJY3VdgKKZmLffYjnDD1wiz");
                 $customer = \Stripe\Customer::create(array('email' => $stripeEmail, 'source' => $token));
                 \Stripe\Charge::create(array('customer' => $customer->id, 'amount' => ($orderTotal * 100), 'currency' => 'eur'));
-                dump($token);
+
+                $reservation = $user->getOrderDate();
                 $em = $this->get('doctrine')->getManager();
                 $em->persist($user);
                 $em->flush();
 
-
-
                 $message = \Swift_Message::newInstance()
-                    ->setSubject('hello email')
+                    ->setSubject('Commande')
                     ->setFrom('set@gmail.com')
                     ->setTo($user->getEmail())
                     ->setBody(
@@ -127,34 +87,29 @@ class DefaultController extends Controller
                             'email/order.html.twig',
                             array(
                                 'email' => $user->getEmail(),
-                                'total' => $orderTotal
+                                'total' => $orderTotal,
+                                'date'  => $reservation,
+                                'order' => $user
                             )
                         ),
                         'text/html'
                     );
 
                 $this->get('mailer')->send($message);
-
                 $request->getSession()->clear();
                 $this->addFlash('payment', 'Votre paiement de ' . $orderTotal . ' euros est accepté.');
                 $this->redirectToRoute('home');
-
 
             } catch (\Stripe\Error\Card $e) {
                 $this->addFlash('fail', 'Votre paiement de ' . $orderTotal . ' euros n\' est pas accepté.');
                 // Since it's a decline, \Stripe\Error\Card will be caught
                 $body = $e->getJsonBody();
                 $err = $body['error'];
-                print('Code status : ' . $e->getHttpStatus() . "<br>");
-                print('Le type d\'erreur est : ' . $err['type'] . "<br>");
-                print('Le code d\'erreur est : ' . $err['code'] . "<br>");
-                print('Le message d\'erreur est : ' . $err['message']);
-
                 $this->addFlash('error',
-        'Code status : ' . $e->getHttpStatus() . "\n".
-                'Le type d\'erreur est : ' . $err['type'] . "\n".
-                'Le code d\'erreur est : ' . $err['code'] . "\n".
-                'Le message d\'erreur est : ' . $err['message']);
+                    'Code status : ' . $e->getHttpStatus() . "\n".
+                    'Le type d\'erreur est : ' . $err['type'] . "\n".
+                    'Le code d\'erreur est : ' . $err['code'] . "\n".
+                    'Le message d\'erreur est : ' . $err['message']);
 
             } catch (\Stripe\Error\RateLimit $e) {
                 // Too many requests made to the API too quickly
@@ -179,13 +134,11 @@ class DefaultController extends Controller
             }
         }
 
-        dump($tokenType);
-        dump($stripeEmail);
         $order =$session->get('order');
-        dump($order);
 
         return array(
-            'order' => $order,
+            'order' => $user,
+            'sum' => $sum
         );
     }
 

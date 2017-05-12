@@ -1,0 +1,9 @@
+ul.billets
+{
+    padding-left: 0px;
+}
+
+ul
+{
+    padding-right: 0px !important;
+}

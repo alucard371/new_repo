@@ -7,10 +7,6 @@
             {% elseif app.request.get('_route') == 'recapitulatif' %}
             <li><a href="{{ path('home') }}">Billeterie</a></li>
             <li class="disabled">Récapitulatif</li>
-            {% elseif  app.request.get('_route') == 'paiement'%}
-            <li><a href="{{ path('home') }}">Billeterie</a></li>
-            <li><a href="{{ path('recapitulatif') }}">Récapitulatif</a></li>
-            <li class="disabled">Paiement</li>
             {% endif %}
         </ol>
         </div>

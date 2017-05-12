@@ -12,16 +12,35 @@
     {% endfor %}
 
     {{ form_start(form) }}
-    {# render the task's only field: description #}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8 col-sm-offset-2 col-sm-8">
+            <div class="form-group">
+                {{ form_label(form.email) }}
+                {{ form_errors(form.email) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+            </div>
     {{ form_row(form.email) }}
+        </div>
+    </div>
 
-    <h3>Billets</h3>
-    <ul class="billets" data-prototype="{{ form_widget(form.billets.vars.prototype)|e('html_attr') }}">
-        {% for billet in form.billets %}
-            <li class="list-unstyled">{{ form_widget(form) }}</li>
-        {% endfor %}
-    </ul>
-    <button type="submit" class="btn btn-default">valider</button>
+
+
+    <h3 class="text-center">Billets</h3>
+
+        <ul class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1 billets" data-prototype="{{ form_widget(form.billets.vars.prototype)|e('html_attr') }}">
+            {% for billet in form.billets %}
+                {{ form_row(form.nom) }}
+                {{ form_row(form.prenom) }}
+                {{ form_row(form.pays) }}
+                {{ form_row(form.birthdate) }}
+                {{ form_row(form.dateDeVenue) }}
+                {{ form_row(form.heureDeVenue) }}
+                {{ form_row(form.tarifReduit) }}
+            {% endfor %}
+        </ul>
+</div>
+    <button type="submit" class="align-center btn btn-default">valider</button>
 
     {{ form_end(form) }}
 
@@ -29,5 +48,4 @@
 
 {% block javascripts %}
    {{ parent() }}
-
 {% endblock %}

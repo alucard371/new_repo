@@ -37,7 +37,21 @@
         <h1>Total de la commande : {{ grandTotal }} euros</h1><br>
         <h2>Nombre de billet : {{ billetTotal }}</h2>
         <div>
-            <p class="text-center"><a href="{{ path('paiement') }}"><button class="btn btn-primary">Accédez au paiement</button></a></p>
+            <p class="text-center">
+                <form action="" method="POST">
+                    <script
+                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            data-key="pk_test_WGfmYvVcELpspLen981CmEbn"
+                            data-amount="{{ grandTotal * 100 }}"
+                            data-currency="eur"
+                            data-name="Le Louvre"
+                            data-description="Billeterie"
+                            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                            data-locale="fr"
+                            data-zip-code="true">
+                    </script>
+                </form>
+            </p>
             <p class="text-center"><button type="button" class="btn btn-danger" title="Delete_order" data-toggle="modal" data-target="#orderDialog">Annuler la commande</button></p>
         </div>
             <div class="modal fade" id="orderDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -65,5 +79,13 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <script src="{{ asset('js/stripeButton.js') }}"></script>
+    <script>
+        (function() {
+            Stripe.setPublishableKey('pk_test_WGfmYvVcELpspLen981CmEbn');
+        })();
+    </script>
 
 {% endblock %}

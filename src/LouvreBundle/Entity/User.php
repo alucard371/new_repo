@@ -43,6 +43,11 @@ class User
     protected $total;
 
     /**
+     * @ORM\Column(name="order_date", type="datetime")
+     */
+    protected $orderDate;
+
+    /**
      * @param $billets
      * @return int
      */
@@ -169,6 +174,22 @@ class User
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderDate ()
+    {
+        return $this->orderDate;
+    }
+
+    /**
+     * @param mixed $orderDate
+     */
+    public function setOrderDate ($orderDate)
+    {
+        $this->orderDate = $orderDate;
     }
 }
 

@@ -25,18 +25,24 @@ class BilletType extends AbstractType
             ->add('birthdate', DateType::class, array(
                 'widget' => 'single_text',
                 'html5' => false,
-                'attr' => ['class' => 'birthdate'],
-                'format' => 'dd-MM-yyyy'
+                'attr' => [
+                    'class' => 'birthdate',
+                    'data-provide' => 'datepicker']
             ))
             ->add('dateDeVenue', DateType::class, array(
                 'widget' => 'single_text',
-                'format' => 'dd-MM-yyyy',
                 'html5' => false,
-                'attr' => ['class' => 'dateDeVenue']
+                'attr' => [
+                    'class' => 'dateDeVenue',
+                    'data-provide' => 'datepicker']
             ))
             ->add('heureDeVenue', TimeType::class, array(
-                'html5' => true,
-                'input' => 'datetime',
+                'html5'     => true,
+                'input'     => 'datetime',
+                'widget'    => 'choice',
+                'hours'     => array(
+                    '9','10','11','12','13','14','15','16','17','18','19','20','21','22'
+                ),
                 'attr' => ['class' => 'heureDeVenue']
             ))
             ->add('tarifReduit', CheckboxType::class, array(
