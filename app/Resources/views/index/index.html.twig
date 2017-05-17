@@ -1,4 +1,82 @@
+{% import _self as formMacros %}
 {% extends 'base.html.twig' %}
+
+
+{% macro billetRow(billet) %}
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8 col-sm-offset-2 col-sm-8">
+            <div class="form-group">
+                {{ form_label(billet.nom) }}
+                {{ form_errors(billet) }}
+                {{ form_widget(billet.nom, {'attr': {'class':'form-control'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8 col-sm-offset-2 col-sm-8">
+            <div class="form-group">
+                {{ form_label(billet.prenom) }}
+                {{ form_errors(billet) }}
+                {{ form_widget(billet.prenom, {'attr': {'class':'form-control'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8 col-sm-offset-2 col-sm-8">
+            <div class="form-group">
+                {{ form_label(billet.pays) }}
+                {{ form_errors(billet) }}
+                {{ form_widget(billet.pays, {'attr': {'class':'form-control'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8 col-sm-offset-2 col-sm-8">
+            <div class="form-group">
+                {{ form_label(billet.birthdate) }}
+                {{ form_errors(billet) }}
+                {{ form_widget(billet.birthdate, {'attr': {'class':'form-control'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8 col-sm-offset-2 col-sm-8">
+            <div class="form-group">
+                {{ form_label(billet.dateDeVenue) }}
+                {{ form_errors(billet) }}
+                {{ form_widget(billet.dateDeVenue, {'attr': {'class':'form-control'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8 col-sm-offset-2 col-sm-8">
+            <div class="form-group">
+                {{ form_label(billet.demiJournee) }}
+                {{ form_errors(billet) }}
+                {{ form_widget(billet.demiJournee, {'attr': {'class':'form-control'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8 col-sm-offset-2 col-sm-8">
+            <div class="form-group">
+                {{ form_label(billet.tarifReduit) }}
+                {{ form_errors(billet) }}
+                {{ form_widget(billet.tarifReduit, {'attr': {'class':'form-control'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8 col-sm-offset-2 col-sm-8">
+            <div class="form-group">
+
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+
+
 
 {% block content %}
 
@@ -25,22 +103,21 @@
     </div>
 
 
-
     <h3 class="text-center">Billets</h3>
 
-        <ul class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1 billets" data-prototype="{{ form_widget(form.billets.vars.prototype)|e('html_attr') }}">
-            {% for billet in form.billets %}
-                {{ form_row(form.nom) }}
-                {{ form_row(form.prenom) }}
-                {{ form_row(form.pays) }}
-                {{ form_row(form.birthdate) }}
-                {{ form_row(form.dateDeVenue) }}
-                {{ form_row(form.heureDeVenue) }}
-                {{ form_row(form.tarifReduit) }}
-            {% endfor %}
+        <ul class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1 billets" data-prototype="{{ formMacros.billetRow(form.billets.vars.prototype)|e('html_attr') }}">
+    {% for billet in form.billets %}
+        {{ formMacros.billetRow(billet) }}
+    {% endfor %}
         </ul>
 </div>
-    <button type="submit" class="align-center btn btn-default">valider</button>
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8 col-sm-offset-2 col-sm-8">
+            <div class="form-group">
+                <button type="submit" class="align-center btn btn-default">valider</button>
+            </div>
+        </div>
+    </div>
 
     {{ form_end(form) }}
 

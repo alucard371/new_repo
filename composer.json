@@ -24,7 +24,9 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "twig/twig": "^1.0||^2.0",
         "willdurand/faker-bundle": "@stable",
-        "stripe/stripe-php": "4.*"
+        "stripe/stripe-php": "4.*",
+        "alaczi/twig-country-extension": "^1.0",
+        "symfony/intl": "^3.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

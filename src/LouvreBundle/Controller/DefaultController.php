@@ -5,10 +5,8 @@ namespace LouvreBundle\Controller;
 use LouvreBundle\Entity\Billet;
 use LouvreBundle\Entity\User;
 use LouvreBundle\Form\UserType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Stripe\Stripe;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -48,7 +46,7 @@ class DefaultController extends Controller
     {
         $session = $request->getSession();
         $user = $session->get('order');
-
+        dump($session);
         $billets = $user->getBillets();
         $sum = $user->getTotal($billets);
         $user->setTotal($sum);
@@ -60,44 +58,16 @@ class DefaultController extends Controller
         $user->setOrderDate($orderDate);
 
         if ($request->isMethod('POST')) {
-            try {
-                // Use Stripe's library to make requests...
-                $token = $request->request->get("stripeToken");
-                Stripe::setApiKey("sk_test_xoJY3VdgKKZmLffYjnDD1wiz");
-                $customer = \Stripe\Customer::create(array('email' => $stripeEmail, 'source' => $token));
-                \Stripe\Charge::create(array('customer' => $customer->id, 'amount' => ($orderTotal * 100), 'currency' => 'eur'));
-
                 $reservation = $user->getOrderDate();
                 $em = $this->get('doctrine')->getManager();
                 $em->persist($user);
                 $em->flush();
-
-                $message = \Swift_Message::newInstance()
-                    ->setSubject('Commande')
-                    ->setFrom('set@gmail.com')
-                    ->setTo($user->getEmail())
-                    ->setBody(
-                        $this->renderView(
-                            'email/order.html.twig',
-                            array(
-                                'email' => $user->getEmail(),
-                                'total' => $orderTotal,
-                                'date'  => $reservation,
-                                'order' => $user
-                            )
-                        ),
-                        'text/html'
-                    );
-
-                $this->get('mailer')->send($message);
                 $request->getSession()->clear();
                 $this->generateUrl('Accueil');
                 $this->addFlash('payment', 'Votre paiement de ' . $orderTotal . ' euros est accepté.');
 
 
-            } catch (\Stripe\Error\Card $e) {
-                $this->addFlash('fail', 'Votre paiement de ' . $orderTotal . ' euros n\' est pas accepté.');
-            }
+
         }
 
         return $this->render('recapitulatif/recapitulatif.html.twig',array(

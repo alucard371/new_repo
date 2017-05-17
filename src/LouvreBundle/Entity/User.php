@@ -93,7 +93,7 @@ class User
         foreach ( $billets as $billet) {
             $visitorBirth = $billet->getBirthdate();
             $visitorVenue = $billet->getDateDeVenue();
-            $heureDeVenue = $billet->getHeureDeVenue();
+
             $tarifReduit  = $billet->isTarifReduit();
 
             if ($tarifReduit == true)
@@ -125,21 +125,20 @@ class User
             }
 
 
-            if ($heureDeVenue->format('H') >= 14){
-                $demiJournee = true;
-                $montant = $montant/2;
-            }
-            else {
-                $demiJournee = false;
-            }
 
-            $billet->setDemiJournee($demiJournee);
+
+
             $billet->setMontant($montant);
             $billet->setTarif($tarif);
             $billet->setUser($this);
             dump($billet);
             $this->$billets[] = $billet;
         }
+    }
+
+    public function removeBillet (Billet $billet)
+    {
+        $this->billets->removeElement($billet);
     }
 
     /**

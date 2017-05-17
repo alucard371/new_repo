@@ -19,3 +19,24 @@ services:
   final_order:
           class: LouvreBundle\Services\finalOrder
           arguments: ["doctrine.orm.entity_manager", "@session"]
+
+  #for the stripe library
+  stripe:
+          class: LouvreBundle\Services\Stripe
+          arguments: ['apiKey', 'apiToken']
+
+  #for the total of the order
+  montant:
+          class: LouvreBundle\Services\Montant
+
+  order_listener:
+          class: LouvreBundle\Listeners\OrderListener
+          arguments: ['@montant','@mailer','@templating']
+          tags:
+                  - {name: doctrine.event_listener, event:prePersist}
+                  - {name: doctrine.event_listener, event:postPersist}
+
+  alaczi.twig.country_extension:
+          class: alaczi\Twig\Extension\CountryExtension
+          tags:
+              - { name: twig.extension }

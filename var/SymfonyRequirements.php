@@ -69,7 +69,7 @@ class Requirement
     /**
      * Returns the message for testing the requirement.
      *
-     * @return string The recapitulatif message
+     * @return string The test message
      */
     public function getTestMessage()
     {
@@ -631,12 +631,6 @@ class SymfonyRequirements extends RequirementCollection
             function_exists('mb_strlen'),
             'mb_strlen() should be available',
             'Install and enable the <strong>mbstring</strong> extension.'
-        );
-
-        $this->addRecommendation(
-            function_exists('iconv'),
-            'iconv() should be available',
-            'Install and enable the <strong>iconv</strong> extension.'
         );
 
         $this->addRecommendation(

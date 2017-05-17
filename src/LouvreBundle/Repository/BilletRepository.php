@@ -2,6 +2,8 @@
 
 namespace LouvreBundle\Repository;
 
+use Doctrine\ORM\EntityRepository;
+
 /**
  * BilletRepository
  *

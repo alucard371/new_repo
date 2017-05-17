@@ -11,16 +11,16 @@
             <div class="col-xs-6 col-lg-3 col-md-4 col-sm-6 panel panel-primary">
                 <div class="panel-heading"><p>Nom du visiteur :  {{ billet.nom }}</p></div><br>
                 Prenom du visiteur : <div>{{ billet.prenom }}</div><br>
-                <div>{{ billet.pays }}</div><br>
+                <div>{{ billet.pays|country(app.request.locale) }}</div><br>
                 {% if  billet.demiJournee == true %}
                     <div><p>Vous bénéficiez du tarif demi-journée.</p></div><br>
                 {% else %}
                     <div><p>Tarif journée</p></div><br>
                 {% endif %}
-                <div>{{ billet.tarif }}</div><br>
-                <div>{{ billet.birthdate|date("d/m/Y") }}</div><br>
-                <div>{{ billet.dateDeVenue|date("d/m/Y") }}</div><br>
-                <div>{{ billet.heureDeVenue|date("H:i") }}</div><br>
+
+                <div>Tarif : {{ billet.tarif }}</div><br>
+                <div>Date de naissance : {{ billet.birthdate|date("d/m/Y") }}</div><br>
+                <div>Date prévue de la visite : {{ billet.dateDeVenue|date("d/m/Y") }}</div><br>
                 <div class="panel-footer panel-primary">Montant : {{ billet.montant }}</div>
             </div>
 

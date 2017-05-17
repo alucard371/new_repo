@@ -40,14 +40,14 @@ class Billet
     /**
      * @var string
      *
-     * @ORM\Column(name="nom", type="string", length=255)
+     * @ORM\Column(name="nom", type="string", length=255, nullable=false)
      */
     private $nom;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="prenom", type="string", length=255)
+     * @ORM\Column(name="prenom", type="string", length=255, nullable=false)
      */
     private $prenom;
 
@@ -79,12 +79,6 @@ class Billet
      * @ORM\Column(name="dateDeVenue", type="date")
      */
     private $dateDeVenue;
-
-    /**
-     * @var \DateTime
-     * @ORM\Column(name="heure_de_venue", type="datetime")
-     */
-    private $heureDeVenue;
 
     /**
      * @var integer
@@ -241,29 +235,19 @@ class Billet
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isDemiJournee()
+    public function isDemiJournee ()
     {
         return $this->demiJournee;
     }
 
     /**
-     * @param boolean $demiJournee
+     * @param bool $demiJournee
      */
-    public function setDemiJournee($demiJournee)
+    public function setDemiJournee (bool $demiJournee)
     {
         $this->demiJournee = $demiJournee;
-    }
-
-    /**
-     * Get demiJournee
-     *
-     * @return boolean
-     */
-    public function getDemiJournee()
-    {
-        return $this->demiJournee;
     }
 
     /**
@@ -321,23 +305,4 @@ class Billet
     {
         $this->user = $user;
     }
-
-    /**
-     * @return \DateTime
-     */
-    public function getHeureDeVenue ()
-    {
-        return $this->heureDeVenue;
-    }
-
-    /**
-     * @param \DateTime $heureDeVenue
-     */
-    public function setHeureDeVenue (\DateTime $heureDeVenue)
-    {
-        $this->heureDeVenue = $heureDeVenue;
-    }
-
-
-
 }
