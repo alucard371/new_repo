@@ -9,7 +9,7 @@ Accueil:
     defaults: { _controller: LouvreBundle:Order:indexOrder}
 
 Recap:
-    path:     /recap
+    path:     /recapitulatif
     methods:  ['GET','POST']
     defaults: { _controller: LouvreBundle:Order:recapOrder}
 

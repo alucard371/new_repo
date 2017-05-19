@@ -37,14 +37,14 @@
 
         <h1>Total de la commande : {{ grandTotal }} euros</h1><br>
         <h2>Nombre de billet : {{ billetTotal }}</h2>
-        <h2>Nombre de billet : {{ dump(token) }}</h2>
+        <h2>Nombre de billet : {{ dump(key) }}</h2>
 
         <div>
             <div class="text-center">
                 <form action="" method="POST">
                     <script
                             src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                            data-key={{ token }}
+                            data-key={{ key }}
                             data-amount="{{ grandTotal * 100 }}"
                             data-currency="eur"
                             data-name="Le Louvre"
@@ -54,27 +54,9 @@
                             data-zip-code="true">
                     </script>
                 </form>
-            </p>
-            <p class="text-center"><button class="btn btn-danger" title="Delete_order" data-toggle="modal" data-target="#orderDialog">Annuler la commande</button></p>
+            </div>
         </div>
-            <div class="modal fade" id="orderDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
-                        </div>
-                        <div class="modal-body">
-                            Confirmez la suppression
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-default" data-dismiss="modal">Annuler</button>
-                            <a href="{{ path('clear_order', { 'order': order }) }}"><button class="btn btn-warning">Annuler la commande</button></a>
-                        </div>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
-        </div>
+
         <div class="text-center"><h5>Attention:</h5><p>Le tarif réduit est octroyé sous reserve de présentation d'un justificatif (étudiant, employé de musée, Ministère de la culture, militaire, ...)</p></div>
     </div>
 

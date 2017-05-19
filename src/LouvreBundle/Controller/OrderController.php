@@ -43,7 +43,7 @@ class OrderController extends Controller
     {
         $recap = $this->get('order')->recap($request);
 
-        $key = $this->get('stripe')->getApiKey();
+        $key = $this->get('stripe')->getApiToken();
 
         return $this->render(':recapitulatif:recapOrder.html.twig', [
             'order' => $recap,
