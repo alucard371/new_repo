@@ -115,10 +115,12 @@ class Billet
 
     /**
      * @param string $tarif
+     * @return Billet
      */
     public function setTarif(string $tarif)
     {
         $this->tarif = $tarif;
+        return $this;
     }
 
     /**

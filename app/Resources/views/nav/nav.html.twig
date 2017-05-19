@@ -2,11 +2,15 @@
     <div class="container-fluid">
             <a class="navbar-brand" href="{{ path('Accueil') }}">Le Louvre</a>
         <ol class=" text-center breadcrumb">
-            {% if app.request.get('_route') == 'Accueil'%}
+            {% if app.request.get('_route') == 'Form'%}
             <li class="disabled">Billeterie</li>
-            {% elseif app.request.get('_route') == 'Recapitulatif' %}
+            {% elseif app.request.get('_route') == 'Recap' %}
             <li><a href="{{ path('Accueil') }}">Billeterie</a></li>
             <li class="disabled">Récapitulatif</li>
+            {% elseif app.request.get('_route') == 'Come-back' %}
+                <li class="disabled">Billeterie</li>
+                <li class="disabled">Récapitulatif</li>
+                <li>>Confirmation</li>
             {% endif %}
         </ol>
     </div><!-- /.container-fluid -->

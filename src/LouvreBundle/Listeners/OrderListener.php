@@ -47,6 +47,16 @@ class OrderListener
     public function prePersist (LifecycleEventArgs $args)
     {
         $entity = $args->getObject();
+        if (!$entity instanceof User) {
+            return;
+        }
+        $this->montant->setMontantForOrder($entity);
+    }
+
+
+    public function postPersist (LifecycleEventArgs $args)
+    {
+        $entity = $args->getObject();
 
         if (!$entity instanceof User) {
             return;
@@ -58,7 +68,7 @@ class OrderListener
             ->setTo($entity->getEmail())
             ->setBody(
                 $this->templating->render(
-                    'email/order.html.twig',
+                    'email/orderMail.html.twig',
                     array(
                         'order' => $entity,
                     )

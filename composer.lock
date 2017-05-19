@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "61e6f30b3f2bea041344587a0b2dc106",
+    "content-hash": "9a0b8a94855dfdd4e2c2cee72071cd6e",
     "packages": [
         {
             "name": "alaczi/twig-country-extension",

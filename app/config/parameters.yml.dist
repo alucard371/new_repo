@@ -17,3 +17,7 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    # Stripe token
+    api.token:          YYY_SECRET_KEY_YYY
+    api.publishing_key: YYY_PUBLISHABLE_KEY_YYY

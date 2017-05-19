@@ -2,10 +2,10 @@
 
 {% block content %}
 
+
+
 <h1 class="text-center">Récapitulatif de la commande</h1>
 
-
-<h2 class="text-center">E-mail de la personne qui passe la commande : {{ order.email }}</h2>
     <div class="container">
         {% for billet in order.billets %}
             <div class="col-xs-6 col-lg-3 col-md-4 col-sm-6 panel panel-primary">
@@ -26,6 +26,7 @@
 
         {% endfor %}
     </div>
+
     <div class="container">
         {% set grandTotal = 0 %}
         {% set billetTotal = 0 %}
@@ -36,12 +37,14 @@
 
         <h1>Total de la commande : {{ grandTotal }} euros</h1><br>
         <h2>Nombre de billet : {{ billetTotal }}</h2>
+        <h2>Nombre de billet : {{ dump(token) }}</h2>
+
         <div>
             <div class="text-center">
                 <form action="" method="POST">
                     <script
                             src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                            data-key="pk_test_WGfmYvVcELpspLen981CmEbn"
+                            data-key={{ token }}
                             data-amount="{{ grandTotal * 100 }}"
                             data-currency="eur"
                             data-name="Le Louvre"
@@ -52,7 +55,7 @@
                     </script>
                 </form>
             </p>
-            <p class="text-center"><button type="button" class="btn btn-danger" title="Delete_order" data-toggle="modal" data-target="#orderDialog">Annuler la commande</button></p>
+            <p class="text-center"><button class="btn btn-danger" title="Delete_order" data-toggle="modal" data-target="#orderDialog">Annuler la commande</button></p>
         </div>
             <div class="modal fade" id="orderDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -65,7 +68,7 @@
                             Confirmez la suppression
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                            <button class="btn btn-default" data-dismiss="modal">Annuler</button>
                             <a href="{{ path('clear_order', { 'order': order }) }}"><button class="btn btn-warning">Annuler la commande</button></a>
                         </div>
                     </div><!-- /.modal-content -->
@@ -87,5 +90,4 @@
             Stripe.setPublishableKey('pk_test_WGfmYvVcELpspLen981CmEbn');
         })();
     </script>
-
 {% endblock %}

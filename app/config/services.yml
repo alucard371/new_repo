@@ -23,7 +23,7 @@ services:
   #for the stripe library
   stripe:
           class: LouvreBundle\Services\Stripe
-          arguments: ['apiKey', 'apiToken']
+          arguments: ['%api.publishing_key%', '%api.token%']
 
   #for the total of the order
   montant:
@@ -40,3 +40,14 @@ services:
           class: alaczi\Twig\Extension\CountryExtension
           tags:
               - { name: twig.extension }
+
+  order:
+          class: LouvreBundle\Services\Order
+          arguments:
+              - '@doctrine.orm.entity_manager'
+              - '@session'
+              - '@form.factory'
+              - '@templating'
+              - '@mailer'
+              - '@stripe'
+              - '@workflow.billeterie'

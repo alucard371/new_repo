@@ -5,8 +5,15 @@ louvre:
 
 Accueil:
     path:     /
-    defaults: {_controller: LouvreBundle:Default:index}
+    methods:  ['GET', 'POST']
+    defaults: { _controller: LouvreBundle:Order:indexOrder}
 
-Recapitulatif:
-    path:     /recapitulatif
-    defaults: {_controller: LouvreBundle:Default:recap}
+Recap:
+    path:     /recap
+    methods:  ['GET','POST']
+    defaults: { _controller: LouvreBundle:Order:recapOrder}
+
+Come-back:
+    path:     /checkout
+    methods:  'GET'
+    defaults: { _controller: LouvreBundle:Order:checkout}

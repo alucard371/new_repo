@@ -8,11 +8,34 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    stripe_api_token:       '%api.token%'
+    stripe_publishing_key:  '%api.publishing_key%'
 
 framework:
+    workflows:
+        billeterie:
+            type: 'workflow'
+            marking_store:
+                type: multiple_state
+                arguments:
+                    - 'currentPlace'
+            supports:
+                - LouvreBundle\Entity\User
+            places:
+                - form
+                - recap
+                - come-back
+            transitions:
+                start:
+                  from: form
+                  to:   recap
+                payment:
+                  from: recap
+                  to:   come-back
+
     #esi:             ~
     default_locale: fr
-    translator:      { fallbacks: [fr] }
+    translator:      { fallbacks: ["%locale%"] }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"

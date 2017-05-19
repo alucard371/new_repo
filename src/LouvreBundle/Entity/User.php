@@ -33,7 +33,7 @@ class User
     private $email;
 
     /**
-     * @ORM\OneToMany(targetEntity="Billet", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Billet", mappedBy="user", cascade={"persist", "remove"})
      */
     protected $billets;
 
@@ -46,6 +46,26 @@ class User
      * @ORM\Column(name="order_date", type="datetime")
      */
     protected $orderDate;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="validated", type="boolean", nullable=true)
+     */
+    private $validated;
+
+    /**
+     * @var string
+     * @ORM\Column(name="order_number", type="string", nullable=true)
+     */
+    private $orderNumber;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="current_place", type="array")
+     */
+    private $currentPlace;
 
     /**
      * @param $billets
@@ -190,5 +210,57 @@ class User
     {
         $this->orderDate = $orderDate;
     }
+
+    /**
+     * @return bool
+     */
+    public function isValidated ()
+    {
+        return $this->validated;
+    }
+
+    /**
+     * @param bool $validated
+     */
+    public function setValidated (bool $validated)
+    {
+        $this->validated = $validated;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderNumber ()
+    {
+        return $this->orderNumber;
+    }
+
+    /**
+     * @param string $orderNumber
+     */
+    public function setOrderNumber (string $orderNumber)
+    {
+        $this->orderNumber = $orderNumber;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCurrentPlace ()
+    {
+        return $this->currentPlace;
+    }
+
+    /**
+     * @param array $currentPlace
+     */
+    public function setCurrentPlace (array $currentPlace)
+    {
+        $this->currentPlace = $currentPlace;
+    }
+
+
+
+
 }
 

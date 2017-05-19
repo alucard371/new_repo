@@ -14,7 +14,7 @@ document.getElementById('customButton').addEventListener('click', function(e) {
     handler.open({
         name: 'Le Louvre',
         description: 'Paiement',
-        zipCode: true,
+        zipCode: false,
         currency: 'eur'
     });
     e.preventDefault();

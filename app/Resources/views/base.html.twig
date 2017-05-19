@@ -18,6 +18,13 @@
         {% block nav %}
             {% include('nav/nav.html.twig') %}
         {% endblock %}
+        {% for label, flashes in app.session.flashbag.all %}
+            {% for flash in flashes %}
+                <div class="alert alert-{{ label }}">
+                    {{ flash }}
+                </div>
+            {% endfor %}
+        {% endfor %}
         {% if app.session.flashBag.has('payment') %}
             <div class="alert alert-success alert-dismissable fade in">
                 {% for msg in app.session.flashBag.get('payment') %}

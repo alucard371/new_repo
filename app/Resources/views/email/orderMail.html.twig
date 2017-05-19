@@ -7,9 +7,7 @@
 
 <h3>Votre commande à bien été effectuée.</h3><br>
 
-Votre commande à été effectuée le {{ date|date('d-m-Y') }} à {{ date|date('H:i') }}<br>
 
-Le total de votre commande est de {{ total }}<br>
 
 {% for billet in order.billets %}
     Nom des visiteurs : {{ billet.nom }}<br>

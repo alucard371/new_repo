@@ -42,7 +42,7 @@ class Stripe
      */
     public function chargeCard ($api, $token, $total)
     {
-        Stripe::setApiKey($api);
+        \Stripe\Stripe::setApiKey($api);
 
         try {
             Charge::create(array(
