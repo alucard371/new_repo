@@ -13,6 +13,7 @@ use LouvreBundle\Entity\Billet;
 use LouvreBundle\Entity\User;
 
 use Doctrine\ORM\EntityManager;
+use LouvreBundle\Form\SearchType;
 use LouvreBundle\Form\UserType;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Bundle\TwigBundle\TwigEngine;
@@ -24,7 +25,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Doctrine\ORM\OptimisticLockException;
 //workflow
 use Symfony\Component\Workflow\Workflow;
-use Symfony\Component\Workflow\Exception\LogicException;
 //Stripe error
 use Stripe\Error\Card;
 
@@ -140,7 +140,7 @@ class Order
             //transition for the start phase
             $this->workflow->apply($order, 'start');
             try {
-                $response = new RedirectResponse('/recap');
+                $response = new RedirectResponse('/recapitulatif');
                 $response->send();
             } catch (\InvalidArgumentException $exception) {
                 $exception->getMessage();
@@ -173,7 +173,7 @@ class Order
                 $response->send();
                 $this->session->getFlashBag()->add(
                     'warning',
-                    'Le maximum de billes vendu ne peu dépasser 1000.'
+                    'Le maximum de billets vendu ne peut dépasser 1000 unités.'
                 );
             }
         } catch (\InvalidArgumentException $exception) {
@@ -234,6 +234,45 @@ class Order
             }
         }
         return $order;
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\Form\FormView
+     */
+    public function searchOrder (Request $request)
+    {
+        $form = $this->form->create(SearchType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->getData();
+            $order = $this->doctrine->getRepository('LouvreBundle:User')
+                ->findOneBy(array('email'=>$search['email']));
+
+            if($order)
+            {
+                $this->session->getFlashBag()->add(
+                    'success',
+                    'Votre commande est enregistrée'
+                );
+                $mail = \Swift_Message::newInstance()
+                    ->setSubject('Commande')
+                    ->setFrom('balohe37pro@gmail.com')
+                    ->setTo($order->getEmail())
+                    ->setBody(
+                        $this->templating->render(
+                            'email/orderMail.html.twig',
+                            array(
+                                'order' => $order,
+                            )
+                        ),
+                        'text/html'
+                    );
+                $this->mailer->send($mail);
+            }
+        }
+        return $form->createView();
     }
 
 }

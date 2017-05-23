@@ -4,12 +4,10 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{% block title %}Le Louvre!{% endblock %}</title>
-
+        <title>{% block title %}Le Louvre {% endblock %}</title>
         {% block stylesheets %}
             {% include('assets/stylesheet.html.twig') %}
         {% endblock %}
-
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
@@ -20,28 +18,30 @@
         {% endblock %}
         {% for label, flashes in app.session.flashbag.all %}
             {% for flash in flashes %}
-                <div class="alert alert-{{ label }}">
+                <div class="alert alert-success alert-dismissable fade in alert-{{ label }}">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     {{ flash }}
                 </div>
             {% endfor %}
         {% endfor %}
-        {% if app.session.flashBag.has('payment') %}
-            <div class="alert alert-success alert-dismissable fade in">
-                {% for msg in app.session.flashBag.get('payment') %}
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    {{ msg }}
-                {% endfor %}
-            </div>
-        {% elseif app.session.flashBag.has('error')%}
-            <div class="alert alert-warning alert-dismissable fade in">
-                {% for msg in app.session.flashBag.get('error') %}
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    {{ msg | nl2br }}
-                {% endfor %}
-            </div>
-        {% endif %}
-
-        {% block content %}{% endblock %}
+        {% block header %}
+            <ol class=" text-center breadcrumb">
+                {% if app.request.get('_route') == 'Accueil'%}
+                    <li class="active">Billeterie</li>
+                    <li class="disabled">Récapitulatif</li>
+                    <li class="disabled">Confirmation</li>
+                {% elseif app.request.get('_route') == 'Recap' %}
+                    <li><a href="{{ path('Accueil') }}">Billeterie</a></li>
+                    <li class="active">Récapitulatif</li>
+                {% elseif app.request.get('_route') == 'Come-back' %}
+                    <li><a href="{{ path('Accueil') }}">Billeterie</a></li>
+                    <li class="disabled">Récapitulatif</li>
+                    <li class="active">Confirmation</li>
+                {% endif %}
+            </ol>
+        {% endblock %}
+        {% block content %}
+        {% endblock %}
         {% block javascripts %}
             {% include ('assets/javascript.html.twig') %}
         {% endblock %}

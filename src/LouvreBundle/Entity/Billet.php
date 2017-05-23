@@ -26,7 +26,7 @@ class Billet
     /**
      * @var string
      *
-     * @ORM\Column(name="tarif", type="string", length=255)
+     * @ORM\Column(name="tarif", type="string", length=255, nullable=false)
      */
     private $tarif;
 
@@ -68,17 +68,7 @@ class Billet
     private $birthdate;
 
 
-    /**
-     * @var boolean
-     * @ORM\Column(name="demi_journee", type="boolean")
-     */
-    private $demiJournee;
 
-    /**
-     * @var \DateTime
-     * @ORM\Column(name="dateDeVenue", type="date")
-     */
-    private $dateDeVenue;
 
     /**
      * @var integer
@@ -117,10 +107,33 @@ class Billet
      * @param string $tarif
      * @return Billet
      */
-    public function setTarif(string $tarif)
+    /**
+     * Set ticket price
+     *
+     * @param integer $age
+     * @param bool $reduit
+     * @return int
+     */
+    public function setTarif ($age, $reduit)
     {
-        $this->tarif = $tarif;
-        return $this;
+        switch ($age) {
+            case ($age<4):
+                $this->tarif = "gratuit";
+                break;
+            case ($age>=4 && $age <= 12):
+                $this->tarif = "enfant";
+                break;
+            case ($age >= 60):
+                $this->tarif = "senior";
+                break;
+            case ($reduit === true) :
+                $this->tarif = "réduit";
+                break;
+            default :
+                $this->tarif = "normal";
+                break;
+        }
+        return $this->tarif;
     }
 
     /**
@@ -237,46 +250,6 @@ class Billet
     }
 
     /**
-     * @return bool
-     */
-    public function isDemiJournee ()
-    {
-        return $this->demiJournee;
-    }
-
-    /**
-     * @param bool $demiJournee
-     */
-    public function setDemiJournee (bool $demiJournee)
-    {
-        $this->demiJournee = $demiJournee;
-    }
-
-    /**
-     * Set dateDeVenue
-     *
-     * @param \DateTime $dateDeVenue
-     *
-     * @return Billet
-     */
-    public function setDateDeVenue($dateDeVenue)
-    {
-        $this->dateDeVenue = $dateDeVenue;
-
-        return $this;
-    }
-
-    /**
-     * Get dateDeVenue
-     *
-     * @return \DateTime $dateDeVenue
-     */
-    public function getDateDeVenue()
-    {
-        return $this->dateDeVenue;
-    }
-
-    /**
      * @return int
      */
     public function getMontant()
@@ -285,11 +258,30 @@ class Billet
     }
 
     /**
-     * @param int $montant
+     * @param $tarif
+     * @return int
+     * @internal param int $montant
      */
-    public function setMontant(int $montant)
+    public function SetMontant ($tarif)
     {
-        $this->montant = $montant;
+        switch ($tarif) {
+            case ($tarif === "normal"):
+                $this->montant = 16;
+                break;
+            case ($tarif === "enfant"):
+                $this->montant = 8;
+                break;
+            case ($tarif === "senior"):
+                $this->montant = 12;
+                break;
+            case ($tarif === "réduit"):
+                $this->montant = 10;
+                break;
+            case ($tarif === "gratuit"):
+                $this->montant = 0;
+                break;
+        }
+        return $this->montant;
     }
 
     /**

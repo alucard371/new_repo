@@ -43,7 +43,7 @@ class OrderController extends Controller
     {
         $recap = $this->get('order')->recap($request);
 
-        $key = $this->get('stripe')->getApiToken();
+        $key = $this->get('stripe')->getApiKey();
 
         return $this->render(':recapitulatif:recapOrder.html.twig', [
             'order' => $recap,
@@ -54,6 +54,11 @@ class OrderController extends Controller
     public function checkoutAction ()
     {
         return $this->render('checkout/checkout.html.twig');
+    }
+
+    public function checkoutStripeAction ()
+    {
+        return $this->render(':recapitulatif:checkoutStripe.html.twig');
     }
 
 

@@ -3,11 +3,12 @@
 
 {% block content %}
 
+
 <h1>Le musée du Louvre</h1><a href="{{ url('Accueil') }}"><img src="{{ asset('icon/le_louvre.png') }}"></a><br>
 
-<h3>Votre commande à bien été effectuée.</h3><br>
+<h3>Votre commande d'un total de {{ order.total(order.billets) }} à bien été effectuée le {{ order.orderDate|date }}</h3><br>
 
-
+    <p>Le numéro de votre commande est: {{ order.orderNumber }}</p><br>
 
 {% for billet in order.billets %}
     Nom des visiteurs : {{ billet.nom }}<br>

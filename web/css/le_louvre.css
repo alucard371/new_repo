@@ -7,3 +7,30 @@ ul
 {
     padding-right: 0px !important;
 }
+
+body
+{
+    background: url("../background/pyramide-louvre.jpg") no-repeat;
+}
+
+.transparent{
+    background-color: rgba(0,0,0,0.15);
+}
+
+.panel{
+    border: 1px #222;
+    background: transparent none;
+}
+
+nav.navbar.navbar-default
+{
+    margin-bottom: 0px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+ol.text-center.breadcrumb
+{
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}

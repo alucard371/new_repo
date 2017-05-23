@@ -2,7 +2,7 @@
 
 {% block title %}{{ parent() }} - Finalisation{% endblock %}
 
-{% block body %}
+{% block content %}
     <div class="container">
         <div class="row">
             <h1>Merci encore de votre commande !</h1>
@@ -11,7 +11,7 @@
                 vos billets vous seront envoyés par mail et font foi de preuve d'entrée, si vous égarez ces derniers, merci
                 d'utiliser le formulaire en page d'accueil de la billeterie pour les retrouver.
             </p>
-            <a href="{{ path('/order') }}" class="">Retourner à l'accueil</a>
+            <a href="{{ path("Accueil") }}" class="">Retourner à l'accueil</a>
         </div>
     </div>
 {% endblock %}

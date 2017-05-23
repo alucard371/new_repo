@@ -36,17 +36,19 @@ class Stripe
     }
 
     /**
-     * @param string $api
-     * @param string $token
+     * @param $apiKey
+     * @param $apiToken
      * @param int $total
+     * @internal param string $api
+     * @internal param string $token
      */
-    public function chargeCard ($api, $token, $total)
+    public function chargeCard ($apiKey, $apiToken, $total)
     {
-        \Stripe\Stripe::setApiKey($api);
+        \Stripe\Stripe::setApiKey("sk_test_zpjn5Lk4eOaCDzPRaslVL3ft");
 
         try {
             Charge::create(array(
-                'source'        => $token,
+                'source'        => $apiToken,
                 'amount'        => ($total * 100),
                 'currency'      => 'eur',
                 'description'   => 'Billeterie du Louvre',));

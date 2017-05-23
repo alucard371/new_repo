@@ -1,0 +1,30 @@
+<div class="panel-footer">
+    {% if app.request.get('_route') == 'Accueil'%}
+        <div class="row">
+            <div class="col-xs-offset-1 col-xs-10 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8 col-sm-offset-2 col-sm-8">
+                <div class="form-group text-center">
+                    <button type="submit" class="align-center btn btn-default">valider</button>
+                </div>
+            </div>
+        </div>
+    {% elseif app.request.get('_route') == 'Recap' %}
+        <div class="row">
+            <div class="text-center">
+                <form action="" method="POST">
+                    <script
+                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            data-key="{{ key }}"
+                            data-amount="{{ grandTotal * 100 }}"
+                            data-currency="eur"
+                            data-name="Le Louvre"
+                            data-description="Billeterie"
+                            data-image="{{ asset('icon/le_louvre.png') }}"
+                            data-locale="fr"
+                            data-zip-code="false">
+                    </script>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+
+</div>

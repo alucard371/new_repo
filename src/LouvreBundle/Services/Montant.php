@@ -35,14 +35,14 @@ class Montant
             if (!is_object($birthdate) && !is_object($dateDeVenue)) {
                 throw new \InvalidArgumentException(
                     sprintf(
-                        'Wrong value passed through the method, should be an object, given "%s"', gettype([$birthdate, $dateDeVenue])
+                        'Mauvaise valeur passée, donnée "%s"', gettype([$birthdate, $dateDeVenue])
                     )
                 );
             }
         } catch (\InvalidArgumentException $exception) {
             $exception->getMessage();
         }
-        return date_diff($birthdate, $dateDeVenue)->y;
+        return ($birthdate->diff($dateDeVenue))->y;
     }
 
     /**
@@ -54,8 +54,8 @@ class Montant
         $tickets = $user->getBillets();
         foreach ($tickets as $ticket) {
 
-            $age = $this->setAge($ticket->getBirthdate(), $ticket->getDateDeVenue());
-            $tarif = $this->setTarif($age, $ticket->isTarifReduit());
+            $age = $this->setAge($ticket->getBirthdate(), $user->getDateDeVenue());
+            $tarif = $ticket->setTarif($age, $ticket->isTarifReduit());
             $ticket->setMontant($tarif);
 
             //define the order price
@@ -63,37 +63,9 @@ class Montant
             $user->setTotal($this->orderTotal);
             //link tickets to an user
             $ticket->setUser($user);
-
         }
         return $user;
     }
 
-    /**
-     * Set ticket price
-     *
-     * @param integer $age
-     * @param bool $reduit
-     * @return int
-     */
-    public function setTarif ($age, $reduit)
-    {
-        switch ($age) {
-            case ($age<4):
-                $this->tarif = 0;
-                break;
-            case ($age>=4 && $age <= 12):
-                $this->tarif = 8;
-                break;
-            case ($age >= 60):
-                $this->tarif = 12;
-                break;
-            case $reduit :
-                $this->tarif = 10;
-                break;
-            default :
-                $this->tarif = 16;
-                break;
-        }
-        return $this->tarif;
-    }
+
 }

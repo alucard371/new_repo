@@ -33,6 +33,12 @@ class User
     private $email;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(name="dateDeVenue", type="date")
+     */
+    private $dateDeVenue;
+
+    /**
      * @ORM\OneToMany(targetEntity="Billet", mappedBy="user", cascade={"persist", "remove"})
      */
     protected $billets;
@@ -66,6 +72,12 @@ class User
      * @ORM\Column(name="current_place", type="array")
      */
     private $currentPlace;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="demi_journee", type="boolean")
+     */
+    private $demiJournee;
 
     /**
      * @param $billets
@@ -259,6 +271,45 @@ class User
         $this->currentPlace = $currentPlace;
     }
 
+    /**
+     * Set dateDeVenue
+     *
+     * @param \DateTime $dateDeVenue
+     *
+     * @return User
+     */
+    public function setDateDeVenue($dateDeVenue)
+    {
+        $this->dateDeVenue = $dateDeVenue;
+
+        return $this;
+    }
+
+    /**
+     * Get dateDeVenue
+     *
+     * @return \DateTime $dateDeVenue
+     */
+    public function getDateDeVenue()
+    {
+        return $this->dateDeVenue;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDemiJournee ()
+    {
+        return $this->demiJournee;
+    }
+
+    /**
+     * @param bool $demiJournee
+     */
+    public function setDemiJournee (bool $demiJournee)
+    {
+        $this->demiJournee = $demiJournee;
+    }
 
 
 

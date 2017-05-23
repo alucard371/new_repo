@@ -1,63 +1,57 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-
+    {% set grandTotal = 0 %}
+    {% set billetTotal = 0 %}
+    {% for billet in order.billets %}
+        {% set grandTotal = grandTotal + billet.montant %}
+        {% set billetTotal = billetTotal +1 %}
+    {% endfor %}
 
 
 <h1 class="text-center">Récapitulatif de la commande</h1>
 
     <div class="container">
-        {% for billet in order.billets %}
-            <div class="col-xs-6 col-lg-3 col-md-4 col-sm-6 panel panel-primary">
-                <div class="panel-heading"><p>Nom du visiteur :  {{ billet.nom }}</p></div><br>
-                Prenom du visiteur : <div>{{ billet.prenom }}</div><br>
-                <div>{{ billet.pays|country(app.request.locale) }}</div><br>
-                {% if  billet.demiJournee == true %}
-                    <div><p>Vous bénéficiez du tarif demi-journée.</p></div><br>
-                {% else %}
-                    <div><p>Tarif journée</p></div><br>
-                {% endif %}
-
-                <div>Tarif : {{ billet.tarif }}</div><br>
-                <div>Date de naissance : {{ billet.birthdate|date("d/m/Y") }}</div><br>
-                <div>Date prévue de la visite : {{ billet.dateDeVenue|date("d/m/Y") }}</div><br>
-                <div class="panel-footer panel-primary">Montant : {{ billet.montant }}</div>
+        <div class="row">
+            <div class="col-lg-8 col-xs-12 col-md-8 col-sm-8">
+                <table class="table table-responsive">
+                    <thead>
+                    <th>Visiteur</th>
+                    <th>Tarif</th>
+                    <th>Prix</th>
+                    </thead>
+                    <tbody>
+                    {% for billet in order.billets %}
+                        <tr>
+                            <td>{{ billet.nom }}</td>
+                            <td>{{ billet.tarif }}</td>
+                            <td>{{ billet.montant }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-
-        {% endfor %}
-    </div>
-
-    <div class="container">
-        {% set grandTotal = 0 %}
-        {% set billetTotal = 0 %}
-        {% for billet in order.billets %}
-            {% set grandTotal = grandTotal + billet.montant %}
-            {% set billetTotal = billetTotal +1 %}
-        {% endfor %}
-
-        <h1>Total de la commande : {{ grandTotal }} euros</h1><br>
-        <h2>Nombre de billet : {{ billetTotal }}</h2>
-        <h2>Nombre de billet : {{ dump(key) }}</h2>
-
-        <div>
-            <div class="text-center">
-                <form action="" method="POST">
-                    <script
-                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                            data-key={{ key }}
-                            data-amount="{{ grandTotal * 100 }}"
-                            data-currency="eur"
-                            data-name="Le Louvre"
-                            data-description="Billeterie"
-                            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                            data-locale="fr"
-                            data-zip-code="true">
-                    </script>
-                </form>
+            <div>
+                <div class="col-lg-4 col-xs-12 col-md-4 col-sm-4">
+                    <div class="transparent panel panel-default text-center">
+                        <div class="panel-heading">Votre commande</div>
+                        <div class="panel-body transparent">
+                            <h3>Total de la commande : {{ grandTotal }} euros</h3><br>
+                            <h3>Nombre de billets : {{ billetTotal }}</h3>
+                            <section>
+                                <div class="text-center">
+                                    <h3>Attention:</h3>
+                                    <h4>Le tarif réduit est octroyé sous reserve de présentation d'un justificatif (étudiant, employé de musée, Ministère de la culture, militaire, ...)</h4>
+                                </div>
+                            </section>
+                        </div>
+                        {% include('panel/panel.html.twig') %}
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div class="text-center"><h5>Attention:</h5><p>Le tarif réduit est octroyé sous reserve de présentation d'un justificatif (étudiant, employé de musée, Ministère de la culture, militaire, ...)</p></div>
+    </div>
+    <div class="container">
     </div>
 
 {% endblock %}
@@ -65,11 +59,5 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-    <script src="https://checkout.stripe.com/checkout.js"></script>
     <script src="{{ asset('js/stripeButton.js') }}"></script>
-    <script>
-        (function() {
-            Stripe.setPublishableKey('pk_test_WGfmYvVcELpspLen981CmEbn');
-        })();
-    </script>
 {% endblock %}
