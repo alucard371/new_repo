@@ -12,10 +12,9 @@ class SearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('mail', EmailType::class,
-                [
-                    'label' => 'Email de la commande recherchée'
-                ]);
+            ->add('email', EmailType::class, array(
+                'label' => 'Email de récupération'
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

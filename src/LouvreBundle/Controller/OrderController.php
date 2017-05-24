@@ -25,9 +25,12 @@ class OrderController extends Controller
 
         $form = $this->get('order')->beginOrder($request);
 
+        $order = $this->get('order')->searchOrder($request);
+
         return $this->render('index/indexOrder.html.twig', [
            'billet' => $billet,
             'form'  => $form,
+            'order' => $order
         ]);
     }
 

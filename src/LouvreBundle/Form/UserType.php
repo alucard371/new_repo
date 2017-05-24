@@ -19,10 +19,11 @@ class UserType extends AbstractType
     {
         $builder->add('email')
                 ->add('dateDeVenue', DateType::class, array(
-                'widget' => 'single_text',
-                'format' => 'dd-MM-yyyy',
-                'html5' => false,
-                'attr' => [
+                'label'     => 'Date de la visite',
+                'widget'    => 'single_text',
+                'format'    => 'dd-MM-yyyy',
+                'html5'     => false,
+                'attr'      => [
                     'class'                             => 'dateDeVenue',
                     'data-provide'                      => 'datepicker',
                     'data-date-language'                => 'fr',
