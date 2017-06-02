@@ -7,12 +7,14 @@
             <div class="col-xs-12 col-md-6 col-lg-6 col-sm-6">
                 <div class="form-group">
                     {{ form_label(billet.nom) }}
+                    {{ form_errors(billet.nom) }}
                     {{ form_widget(billet.nom, {'attr': {'class':'form-control'}}) }}
                 </div>
             </div>
             <div class="col-xs-12 col-md-6 col-lg-6 col-sm-6">
                 <div class="form-group">
                     {{ form_label(billet.prenom) }}
+                    {{ form_errors(billet.prenom) }}
                     {{ form_widget(billet.prenom, {'attr': {'class':'form-control'}}) }}
                 </div>
             </div>
@@ -21,12 +23,14 @@
             <div class="col-xs-12 col-md-6 col-lg-6 col-sm-6">
                 <div class="form-group">
                     {{ form_label(billet.birthdate) }}
+                    {{ form_errors(billet.birthdate) }}
                     {{ form_widget(billet.birthdate, {'attr': {'class':'form-control'}}) }}
                 </div>
             </div>
             <div class="col-xs-12 col-md-4 col-lg-6 col-sm-6">
                 <div class="form-group">
                     {{ form_label(billet.pays) }}
+                    {{ form_errors(billet.pays) }}
                     {{ form_widget(billet.pays, {'attr': {'class':'form-control'}}) }}
                 </div>
             </div>
@@ -35,6 +39,7 @@
             <div class="col-xs-12 col-sm-12 col-lg-12">
                 <div class="text-center form-group">
                     {{ form_label(billet.tarifReduit) }}
+                    {{ form_errors(billet.tarifReduit) }}
                     {{ form_widget(billet.tarifReduit, {'attr': {'class':'form-control'}}) }}
                 </div>
             </div>
@@ -54,23 +59,6 @@
 
     <h3 class="text-center">Il reste actuellement {{ 1000 - tickets }} tickets disponible pour auourd'hui.</h3>
 
-    {% if not form.vars.valid %}
-        <div class="alert alert-danger alert-dismissable fade in text-center">
-            <button class="close" data-dismiss="alert" aria-label="close">
-                <span aria-hidden="true">X</span>
-            </button>
-            Une erreur s'est produite
-            {# Loop through every form item #}
-            {% for child in form.children %}
-                {# Display the errors of the form item #}
-                {%for error in child.vars.errors%}
-                    <strong>{{error.message}}</strong>
-                {%endfor%}
-            {%endfor%}
-        </div>
-    {%endif%}
-
-
 
     {{ form_start(form) }}
 <div class="container">
@@ -80,18 +68,21 @@
                  <div class="text-center col-xs-12 col-md-4 col-lg-4 col-sm-4">
                     <div class="form-group">
                         {{ form_label(form.email) }}
+                        {{ form_errors(form.email) }}
                         {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
                     </div>
                 </div>
                 <div class="text-center col-xs-12 col-md-4 col-lg-4 col-sm-4">
                     <div class="form-group">
                         {{ form_label(form.dateDeVenue) }}
+                        {{ form_errors(form.dateDeVenue) }}
                         {{ form_widget(form.dateDeVenue, {'attr': {'class':'form-control'}}) }}
                     </div>
                 </div>
                 <div class="text-center col-xs-12 col-sm-4 col-lg-4">
                     <div class="form-group">
                         {{ form_label(form.demiJournee) }}
+                        {{ form_errors(form.demiJournee) }}
                         {{ form_widget(form.demiJournee, {'attr': {'class':'form-control'}}) }}
                     </div>
                 </div>
@@ -126,6 +117,7 @@
                     </div>
                      {{ form_start(order) }}
                             <div class="form-group">
+                                {{ form_errors(order.email) }}
                                 {{ form_widget(order.email, {'attr': {'class': 'form-control'}}) }}
                             </div>
                             <p class="help-block">En cas de perte de votre mail de confirmation retrouvez le en renseignant ici l'adresse email utilisé pour votre commande.</p>

@@ -158,14 +158,10 @@ class Order
         $order = $this->session->get('order');
         dump($order);
 
-        if ($order === null || ($order->getTotal($order->getBillets()) === 0))
+       if ($order->getNombreBillets() === 0 || $order->getBillets() === null || null === $order)
         {
             $response = new RedirectResponse('/');
             $response->send();
-            $this->session->getFlashBag()->add('fail', 'Votre commande ne peut être vide');
-        }
-        elseif ($order->getBillets() === null || $order->getNombreBillets() === 0 || $order === null)
-        {
             $this->session->getFlashBag()->add('fail', 'Votre commande ne peut être vide');
         }
 
