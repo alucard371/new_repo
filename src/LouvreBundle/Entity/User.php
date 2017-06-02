@@ -44,6 +44,12 @@ class User
     protected $billets;
 
     /**
+     * @ORM\Column(name="nombre_billets", type="integer")
+     * @var integer
+     */
+    private $nombreBillets;
+
+    /**
      * @ORM\Column(name="Total", type="integer")
      */
     protected $total;
@@ -51,7 +57,7 @@ class User
     /**
      * @ORM\Column(name="order_date", type="datetime")
      */
-    protected $orderDate;
+    private $orderDate;
 
     /**
      * @var boolean
@@ -101,7 +107,9 @@ class User
     }
 
 
-
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->billets = new ArrayCollection();
@@ -116,58 +124,21 @@ class User
     }
 
 
-
     /**
-     * @param mixed $billets
+     * @param Billet $billet
+     * @return $this
+     * @internal param mixed $billets
      */
-    public function addBillets($billets)
+    public function addBillets(Billet $billet)
     {
-        foreach ( $billets as $billet) {
-            $visitorBirth = $billet->getBirthdate();
-            $visitorVenue = $billet->getDateDeVenue();
-
-            $tarifReduit  = $billet->isTarifReduit();
-
-            if ($tarifReduit == true)
-            {
-                $tarif = 'réduit';
-                $montant = 10;
-            }
-            else
-            {
-                $age = $visitorVenue->diff($visitorBirth)->y;
-                switch ($age) {
-                    case ($age<4):
-                        $tarif = 'gratuit';
-                        $montant = 0;
-                        break;
-                    case ($age>=4 && $age <= 12):
-                        $tarif = 'enfant';
-                        $montant = 8;
-                        break;
-                    case ($age > 12 && $age < 60):
-                        $tarif = 'normal';
-                        $montant = 16;
-                        break;
-                    case ($age >= 60):
-                        $tarif = 'senior';
-                        $montant = 12;
-                        break;
-                }
-            }
-
-
-
-
-
-            $billet->setMontant($montant);
-            $billet->setTarif($tarif);
-            $billet->setUser($this);
-            dump($billet);
-            $this->$billets[] = $billet;
-        }
+        /** @var Billet $billets */
+        $this->$billets[] = $billet;
+            return $this;
     }
 
+    /**
+     * @param Billet $billet
+     */
     public function removeBillet (Billet $billet)
     {
         $this->billets->removeElement($billet);
@@ -308,7 +279,31 @@ class User
      */
     public function setDemiJournee (bool $demiJournee)
     {
-        $this->demiJournee = $demiJournee;
+        $now = date("H");
+
+        if ( $now >= 14 && $now <= 20 )
+        {
+            $this->demiJournee = true;
+        } else
+        {
+            $this->demiJournee = $demiJournee;
+        }
+    }
+
+    /**
+     * @return int
+     */
+    public function getNombreBillets (): int
+    {
+        return $this->nombreBillets;
+    }
+
+    /**
+     * @param int $nombreBillets
+     */
+    public function setNombreBillets (int $nombreBillets)
+    {
+        $this->nombreBillets = $nombreBillets;
     }
 
 

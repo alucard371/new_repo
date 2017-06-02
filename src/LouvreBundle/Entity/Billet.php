@@ -56,7 +56,6 @@ class Billet
      *
      * @ORM\Column(name="pays", type="string", length=255)
      *
-     * @Assert\Country()
      */
     private $pays;
 
@@ -66,8 +65,6 @@ class Billet
      * @ORM\Column(name="birthdate", type="date")
      */
     private $birthdate;
-
-
 
 
     /**
@@ -116,23 +113,28 @@ class Billet
      */
     public function setTarif ($age, $reduit)
     {
-        switch ($age) {
-            case ($age<4):
-                $this->tarif = "gratuit";
-                break;
-            case ($age>=4 && $age <= 12):
-                $this->tarif = "enfant";
-                break;
-            case ($age >= 60):
-                $this->tarif = "senior";
-                break;
-            case ($reduit === true) :
-                $this->tarif = "réduit";
-                break;
-            default :
-                $this->tarif = "normal";
-                break;
+
+        if ($age = 0 || $age < 4)
+        {
+            $this->tarif = "gratuit";
         }
+        elseif ($age >= 4 && $age < 12)
+        {
+            $this->tarif = "enfant";
+        }
+        elseif ($age >= 60)
+        {
+            $this->tarif = "senior";
+        }
+        elseif ($reduit === true)
+        {
+            $this->tarif = "réduit";
+        }
+        else
+        {
+            $this->tarif = "normal";
+        }
+
         return $this->tarif;
     }
 

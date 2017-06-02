@@ -8,8 +8,9 @@
 
 namespace LouvreBundle\Services;
 
+
+
 // Entity
-use LouvreBundle\Entity\Billet;
 use LouvreBundle\Entity\User;
 
 use Doctrine\ORM\EntityManager;
@@ -28,6 +29,10 @@ use Symfony\Component\Workflow\Workflow;
 //Stripe error
 use Stripe\Error\Card;
 
+/**
+ * Class Order
+ * @package LouvreBundle\Services
+ */
 class Order
 {
     /**
@@ -94,16 +99,7 @@ class Order
         $this->workflow     = $workflow;
     }
 
-    /**
-     * @return int
-     */
-    public function retrieveBillets ()
-    {
-        return count(
-            $this->doctrine->getRepository(Billet::class)
-                            ->getBilletsByDay()
-        );
-    }
+
 
     /**
      * @param Request $request
@@ -116,7 +112,7 @@ class Order
                 $this->session->clear();
                 throw new \LogicException(
                     sprintf (
-                        'La comande n\'est pas vide !'
+                        'La commande n\'est pas vide !'
                 )
                 );
             }
@@ -130,12 +126,15 @@ class Order
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $order->setNombreBillets(count($order->getBillets()));
             $data = $form->getData();
             $this->session->set('order', $data);
-            $this->session->getFlashBag()->add(
-                'success',
-                'Votre commande est enregistrée'
-            );
+
+                $this->session->getFlashBag()->add(
+                    'success',
+                    'Votre commande est enregistrée'
+                );
+
 
             //transition for the start phase
             $this->workflow->apply($order, 'start');
@@ -157,23 +156,29 @@ class Order
     public function recap (Request $request)
     {
         $order = $this->session->get('order');
-        dump($request);
+        dump($order);
 
-        if ($order->getBillets() === null || null === $order) {
-            throw new \LogicException(
-                printf(
-                    'la commande est vide'
-                )
-            );
+        if ($order === null || ($order->getTotal($order->getBillets()) === 0))
+        {
+            $response = new RedirectResponse('/');
+            $response->send();
+            $this->session->getFlashBag()->add('fail', 'Votre commande ne peut être vide');
+        }
+        elseif ($order->getBillets() === null || $order->getNombreBillets() === 0 || $order === null)
+        {
+            $this->session->getFlashBag()->add('fail', 'Votre commande ne peut être vide');
         }
 
+
         try {
-            if ($this->retrieveBillets() + count($order->getBillets()) > 1000) {
+
+            if (  count($order->getBillets()) > 1000) {
                 $response = new RedirectResponse('/');
                 $response->send();
                 $this->session->getFlashBag()->add(
                     'warning',
-                    'Le maximum de billets vendu ne peut dépasser 1000 unités.'
+                    'Le maximum de billets vendu ne peut dépasser 1000 unités.
+                             Veuillez sélectionner un autre jour pour votre visite.'
                 );
             }
         } catch (\InvalidArgumentException $exception) {
@@ -211,6 +216,7 @@ class Order
                     'Votre commande à bien été enregistrée'
                 );
                 //transition for the payment phase
+
                 $this->workflow->apply($order, 'payment');
                 try {
                     $response = new RedirectResponse('/checkout');
@@ -248,13 +254,13 @@ class Order
         if ($form->isSubmitted() && $form->isValid()) {
             $search = $form->getData();
             $order = $this->doctrine->getRepository('LouvreBundle:User')
-                ->findOneBy(array('email'=>$search['email']));
+                ->findOneBy(['email'=>$search['email']]);
 
             if($order)
             {
                 $this->session->getFlashBag()->add(
                     'success',
-                    'Votre commande est enregistrée'
+                    'Un nouveau mail vous à été envoyé'
                 );
                 $mail = \Swift_Message::newInstance()
                     ->setSubject('Commande')
@@ -263,9 +269,8 @@ class Order
                     ->setBody(
                         $this->templating->render(
                             'email/orderMail.html.twig',
-                            array(
-                                'order' => $order,
-                            )
+                            [
+                                'order' => $order,]
                         ),
                         'text/html'
                     );
@@ -274,5 +279,4 @@ class Order
         }
         return $form->createView();
     }
-
 }

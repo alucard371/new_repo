@@ -17,8 +17,3 @@ Come-back:
     path:     /checkout
     methods:  'GET'
     defaults: { _controller: LouvreBundle:Order:checkout}
-
-checkoutAction:
-    path:     /checkoutAction
-    methods:  ['GET', 'POST']
-    defaults: {_controller: LouvreBundle:Order:checkoutStripe}

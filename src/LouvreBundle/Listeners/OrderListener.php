@@ -13,6 +13,10 @@ use LouvreBundle\Entity\User;
 use LouvreBundle\Services\Montant;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 
+/**
+ * Class OrderListener
+ * @package LouvreBundle\Listeners
+ */
 class OrderListener
 {
     /**
@@ -44,6 +48,9 @@ class OrderListener
         $this->templating   = $templating;
     }
 
+    /**
+     * @param LifecycleEventArgs $args
+     */
     public function prePersist (LifecycleEventArgs $args)
     {
         $entity = $args->getObject();
@@ -54,6 +61,9 @@ class OrderListener
     }
 
 
+    /**
+     * @param LifecycleEventArgs $args
+     */
     public function postPersist (LifecycleEventArgs $args)
     {
         $entity = $args->getObject();

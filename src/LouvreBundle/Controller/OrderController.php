@@ -13,6 +13,10 @@ use Stripe\Error\Card;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class OrderController
+ * @package LouvreBundle\Controller
+ */
 class OrderController extends Controller
 {
     /**
@@ -21,16 +25,20 @@ class OrderController extends Controller
      */
     public function indexOrderAction (Request $request)
     {
-        $billet = $this->get('order')->retrieveBillets();
+        $orders = $this->get('order_manager')->getOrders();
 
         $form = $this->get('order')->beginOrder($request);
+        dump($form);
 
         $order = $this->get('order')->searchOrder($request);
 
+        $nombreTickets = $this->get('order_manager')->getTicketsByDate(new \DateTime());
+
         return $this->render('index/indexOrder.html.twig', [
-           'billet' => $billet,
-            'form'  => $form,
-            'order' => $order
+            'tickets'   => $nombreTickets,
+            'orders'    => $orders,
+            'form'      => $form,
+            'order'     => $order
         ]);
     }
 
@@ -46,23 +54,23 @@ class OrderController extends Controller
     {
         $recap = $this->get('order')->recap($request);
 
+        $nombreTickets =  $this->get('order_manager')->getTicketsByDate($recap->getDateDeVenue());
+
         $key = $this->get('stripe')->getApiKey();
 
         return $this->render(':recapitulatif:recapOrder.html.twig', [
+            'nombreTickets' => $nombreTickets,
             'order' => $recap,
             'key' => $key,
         ]);
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function checkoutAction ()
     {
         return $this->render('checkout/checkout.html.twig');
     }
-
-    public function checkoutStripeAction ()
-    {
-        return $this->render(':recapitulatif:checkoutStripe.html.twig');
-    }
-
 
 }

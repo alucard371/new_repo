@@ -16,8 +16,10 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-
-
+/**
+ * Class AddTickets
+ * @package LouvreBundle\Services
+ */
 class AddTickets
 {
     /**
@@ -35,6 +37,12 @@ class AddTickets
      */
     private $session;
 
+    /**
+     * AddTickets constructor.
+     * @param EntityManager $em
+     * @param FormFactory $form
+     * @param Session $session
+     */
     public function __construct (EntityManager $em, FormFactory $form, Session $session)
     {
         $this->em =$em;

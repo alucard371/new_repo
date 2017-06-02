@@ -12,14 +12,5 @@ use Doctrine\ORM\EntityRepository;
  */
 class BilletRepository extends EntityRepository
 {
-    public function getBilletsByDay ()
-    {
-        return $this->createQueryBuilder('b')
-            ->innerJoin('b.user', 'billet')
-            ->addSelect('billet')
-            ->where('billet.orderDate = :date')
-                ->setParameter('date', new \DateTime())
-            ->getQuery()
-            ->getResult();
-    }
+
 }

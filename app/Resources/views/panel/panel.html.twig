@@ -1,6 +1,6 @@
 <div class="panel-footer">
     {% if app.request.get('_route') == 'Accueil'%}
-        <div class="">
+        <div class="form-group">
             <div class="form-group text-center">
                 <button type="submit" class="align-center btn btn-default">Rechercher</button>
             </div>
@@ -13,6 +13,7 @@
                             src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                             data-key="{{ key }}"
                             data-amount="{{ grandTotal * 100 }}"
+                            data-label="Régler la commande"
                             data-currency="eur"
                             data-name="Le Louvre"
                             data-description="Billeterie"

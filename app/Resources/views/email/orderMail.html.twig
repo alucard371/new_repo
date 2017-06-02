@@ -1,21 +1,44 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
 
+<html lang="fr">
 
-{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Mail de réservation</title>
+</head>
 
 
 <h1>Le musée du Louvre</h1><a href="{{ url('Accueil') }}"><img src="{{ asset('icon/le_louvre.png') }}"></a><br>
 
 <h3>Votre commande d'un total de {{ order.total(order.billets) }} à bien été effectuée le {{ order.orderDate|date }}</h3><br>
 
-    <p>Le numéro de votre commande est: {{ order.orderNumber }}</p><br>
+<p>Le numéro de votre commande est: {{ order.orderNumber }}</p><br>
+<p class="help-block">Ce numéro vous sera demandé lors de votre présentation à l'entrée du musée.</p>
+
+{% if order.demiJournee == true %}
+    <b>Vous bénéficiez du tarif demi-journée, vous pouvez entrer à partir de 14h00 dans le musée.</b>
+{% else %}
+    <b>Vous ne bénéficiez pas du tarif demi-journée.</b>
+{% endif %}
+
 
 {% for billet in order.billets %}
     Nom des visiteurs : {{ billet.nom }}<br>
     Prénom des visiteurs : {{ billet.prenom }}<br>
+    {% if billet.tarifReduit == true %}
+        <b>Veuillez présenter à l'entrée le justificatif pour chaque billet beneficiant du tarif réduit.</b>
+    {% else %}
+        <b>Vous ne bénéficiez pas du tarif réduit.</b>
+    {% endif %}
 {% endfor %}
 
-Code de réservation :<br>
+
 
 Merci !<br>
-{% endblock %}
+
+<p class="help-block">Ce document fait office de billet, veuillez le présenter lors de votre présentation à l'accueil</p>
+
+</html>
+
+
+

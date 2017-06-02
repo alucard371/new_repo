@@ -1,0 +1,6 @@
+services:
+    order_manager:
+        class: LouvreBundle\Manager\OrderManager
+        arguments:
+            -  '@doctrine.orm.entity_manager'
+            -  '@request_stack'

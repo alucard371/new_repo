@@ -11,13 +11,12 @@ namespace LouvreBundle\Services;
 
 use LouvreBundle\Entity\User;
 
+/**
+ * Class Montant
+ * @package LouvreBundle\Services
+ */
 class Montant
 {
-    /**
-     * @var integer
-     */
-    private $tarif;
-
     /**
      * @var integer
      */
@@ -42,7 +41,7 @@ class Montant
         } catch (\InvalidArgumentException $exception) {
             $exception->getMessage();
         }
-        return ($birthdate->diff($dateDeVenue))->y;
+        return date_diff($birthdate,$dateDeVenue)->y;
     }
 
     /**
@@ -55,17 +54,19 @@ class Montant
         foreach ($tickets as $ticket) {
 
             $age = $this->setAge($ticket->getBirthdate(), $user->getDateDeVenue());
+            dump($age);
             $tarif = $ticket->setTarif($age, $ticket->isTarifReduit());
+            dump($tarif);
             $ticket->setMontant($tarif);
 
             //define the order price
             $this->orderTotal += $ticket->getMontant();
+
             $user->setTotal($this->orderTotal);
+
             //link tickets to an user
             $ticket->setUser($user);
         }
         return $user;
     }
-
-
 }

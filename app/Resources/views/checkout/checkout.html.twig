@@ -3,15 +3,27 @@
 {% block title %}{{ parent() }} - Finalisation{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <h1>Merci encore de votre commande !</h1>
-            <p>
-                Le musée du louvre vous remercie de votre commande et vous souhaite une très bonne visite,
-                vos billets vous seront envoyés par mail et font foi de preuve d'entrée, si vous égarez ces derniers, merci
-                d'utiliser le formulaire en page d'accueil de la billeterie pour les retrouver.
-            </p>
-            <a href="{{ path("Accueil") }}" class="">Retourner à l'accueil</a>
+<div class="container">
+    <div class="row">
+        <div class="panel panel-info text-center">
+            <div class="panel-heading">
+                <h1>Merci encore de votre commande !</h1>
+            </div>
+            <div class="panel-body">
+                <p>
+                    Le musée du louvre vous remercie de votre commande et vous souhaite une très bonne visite,
+                    vos billets vous seront envoyés par mail et font foi de preuve d'entrée, si vous égarez ces derniers, merci
+                    d'utiliser le formulaire en page d'accueil de la billeterie pour les retrouver.
+                </p>
+                <p>
+                    En cas de perte de votre e-mail de réservation un formulaire est présent sur la première page afin que vous puissiez le récupérer.
+                    Le numéro unique de réservation faisant foi.
+                </p>
+            </div>
+            <div class="panel-footer">
+                <a href="{{ path("Accueil") }}" class="">Retourner à l'accueil</a>
+            </div>
         </div>
     </div>
+</div>
 {% endblock %}

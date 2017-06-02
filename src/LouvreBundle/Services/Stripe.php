@@ -12,6 +12,10 @@ namespace LouvreBundle\Services;
 use Stripe\Charge;
 use Stripe\Error\Card;
 
+/**
+ * Class Stripe
+ * @package LouvreBundle\Services
+ */
 class Stripe
 {
     /**
@@ -26,8 +30,8 @@ class Stripe
 
     /**
      * Stripe constructor.
-     * @param $apiKey
-     * @param $apiToken
+     * @param string $apiKey
+     * @param string $apiToken
      */
     public function __construct ($apiKey, $apiToken)
     {
@@ -36,22 +40,22 @@ class Stripe
     }
 
     /**
-     * @param $apiKey
-     * @param $apiToken
+     * @param string $apiKey
+     * @param string $apiToken
      * @param int $total
      * @internal param string $api
      * @internal param string $token
      */
     public function chargeCard ($apiKey, $apiToken, $total)
     {
-        \Stripe\Stripe::setApiKey("sk_test_zpjn5Lk4eOaCDzPRaslVL3ft");
+        \Stripe\Stripe::setApiKey($this->getApiToken());
 
         try {
-            Charge::create(array(
+            Charge::create([
                 'source'        => $apiToken,
                 'amount'        => ($total * 100),
                 'currency'      => 'eur',
-                'description'   => 'Billeterie du Louvre',));
+                'description'   => 'Billeterie du Louvre',]);
 
         } catch (Card $e) {
             $e->getMessage();

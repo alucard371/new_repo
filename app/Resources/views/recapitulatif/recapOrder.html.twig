@@ -8,6 +8,7 @@
         {% set billetTotal = billetTotal +1 %}
     {% endfor %}
 
+<h3 class="text-center">Il reste actuellement {{ 1000 - nombreTickets }} tickets disponible pour la journée du {{ order.dateDeVenue|date("d/m/Y") }}.</h3>
 
 <h1 class="text-center">Récapitulatif de la commande</h1>
 
@@ -19,6 +20,8 @@
                     <th>Visiteur</th>
                     <th>Tarif</th>
                     <th>Prix</th>
+                    <th>Pays</th>
+
                     </thead>
                     <tbody>
                     {% for billet in order.billets %}
@@ -26,6 +29,7 @@
                             <td>{{ billet.nom }}</td>
                             <td>{{ billet.tarif }}</td>
                             <td>{{ billet.montant }}</td>
+                            <td>{{ billet.pays|country(app.request.locale)}}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -38,11 +42,10 @@
                         <div class="panel-body transparent">
                             <h3>Total de la commande : {{ grandTotal }} euros</h3><br>
                             <h3>Nombre de billets : {{ billetTotal }}</h3>
+                            <h3>Date de la visite : {{ order.dateDeVenue|date("d/m/Y") }}</h3>
                             <section>
-                                <div class="text-center">
                                     <h3>Attention:</h3>
-                                    <h4>Le tarif réduit est octroyé sous reserve de présentation d'un justificatif (étudiant, employé de musée, Ministère de la culture, militaire, ...)</h4>
-                                </div>
+                                    <p class="help-block">Le tarif réduit est octroyé sous reserve de présentation d'un justificatif (étudiant, employé de musée, Ministère de la culture, militaire, ...)</p>
                             </section>
                         </div>
                         {% include('panel/panel.html.twig') %}

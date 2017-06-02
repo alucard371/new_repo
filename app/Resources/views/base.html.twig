@@ -18,9 +18,9 @@
         {% endblock %}
         {% for label, flashes in app.session.flashbag.all %}
             {% for flash in flashes %}
-                <div class="alert alert-success alert-dismissable fade in alert-{{ label }}">
+                <div class="alert alert-success alert-dismissable fade in alert-{{ label }} text-center">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    {{ flash }}
+                    <strong>{{ flash }}</strong>
                 </div>
             {% endfor %}
         {% endfor %}
