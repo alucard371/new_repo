@@ -5,11 +5,22 @@ var $addTicketLink = $('<a href="#"  class="add_ticket_link"><button onclick="sh
 var $newLinkLi = $('<li class="list-unstyled"></li>').append($addTicketLink);
 
 $(document).ready(function() {
+
+
+
+
     // Get the ul that holds the collection of billets
     $collectionHolder = $('ul.billets');
 
+    // add a delete link to all of the existing billet from li elements
+    $collectionHolder.find('li').each(function () {
+        addBilletFormDeleteLink($(this))
+    });
+
     // add the "add a billet" anchor and li to the billets ul
     $collectionHolder.append($newLinkLi);
+
+
 
     // count the current form inputs we have, use that as the new
     // index when inserting a new item
@@ -23,6 +34,21 @@ $(document).ready(function() {
         addBilletForm($collectionHolder, $newLinkLi);
     });
 });
+
+function addBilletFormDeleteLink($billetFormLi) {
+    var $removeFormA = $('<a href="#"><button class="btn btn-danger">Supprimer le billet</button></a>');
+    $billetFormLi.append($removeFormA);
+
+    $removeFormA.on('click', function (e) {
+        //prevent the link from creating a '#' on the URL
+        e.preventDefault();
+
+        //remove the li from the billet form
+        $billetFormLi.remove();
+    })
+
+}
+
 
 function addBilletForm($collectionHolder, $newLinkLi) {
     // Get the data-prototype explained earlier
@@ -41,4 +67,7 @@ function addBilletForm($collectionHolder, $newLinkLi) {
     // Display the form in the page in an li, before the "Add a tag" link li
     var $newFormLi = $('<li class="list-unstyled"></li>').append(newForm);
     $newLinkLi.before($newFormLi);
+
+    // add a delete link to the new form
+    addBilletFormDeleteLink($newFormLi);
 }
