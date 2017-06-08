@@ -6,9 +6,6 @@ var $newLinkLi = $('<li class="list-unstyled"></li>').append($addTicketLink);
 
 $(document).ready(function() {
 
-
-
-
     // Get the ul that holds the collection of billets
     $collectionHolder = $('ul.billets');
 

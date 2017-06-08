@@ -69,9 +69,10 @@ class BilletType extends AbstractType
                 'constraints' => [
                   new NotBlank(),
                 ],
-                'widget' => 'single_text',
-                'format' => 'dd-MM-yyyy',
-                'html5' => false,
+                'label'     => 'Date de naissance',
+                'widget'    => 'single_text',
+                'format'    => 'dd-MM-yyyy',
+                'html5'     => false,
                 'attr' => [
                     'class'                 => 'birthdate',
                     'data-provide'          => 'datepicker',

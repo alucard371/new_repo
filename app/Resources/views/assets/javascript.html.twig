@@ -12,15 +12,6 @@
         });
     });
 </script>
-<script>
-    var dateVisit = document.getElementById('louvrebundle_user_dateDeVenue');
-    dateVisit.addEventListener('select', function () {
-        var date = $('#louvrebundle_user_dateDeVenue').datepicker('getDate');
-        var dateVisite = $('#dateVisite').append(date.toLocaleDateString('fr'));
-        $('#dateVisite').remove(date.toLocaleDateString('fr'));
-        return date;
-    })
 
-</script>
 
 

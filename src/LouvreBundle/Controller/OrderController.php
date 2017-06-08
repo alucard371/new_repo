@@ -52,6 +52,8 @@ class OrderController extends Controller
      */
     public function recapOrderAction(Request $request)
     {
+
+
         $recap = $this->get('order')->recap($request);
 
         $nombreTickets =  $this->get('order_manager')->getTicketsByDate($recap->getDateDeVenue());
@@ -68,9 +70,12 @@ class OrderController extends Controller
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function checkoutAction ()
+    public function checkoutAction (Request $request)
     {
-        return $this->render('checkout/checkout.html.twig');
-    }
+        $checkout = $this->get('order')->checkout($request);
 
+        return $this->render('checkout/checkout.html.twig', [
+            'order'     => $checkout,
+        ]);
+    }
 }

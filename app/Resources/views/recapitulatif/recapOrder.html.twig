@@ -56,7 +56,12 @@
                                     <p class="help-block">Le tarif réduit est octroyé sous reserve de présentation d'un justificatif (étudiant, employé de musée, Ministère de la culture, militaire, ...)</p>
                             </section>
                         </div>
-                        {% include('panel/panel.html.twig') %}
+                        {% if grandTotal  > 0 %}
+                            {% include('panel/panel.html.twig') %}
+                        {% else %}
+                            <p class="help-block">Il est impossible de valider une commande d'une valeur de 0 euro.</p>
+                        {% endif %}
+                        <a href="{{ path('Accueil') }}"><button class="btn btn-primary">Revenir en arrière</button></a>
                     </div>
                 </div>
             </div>

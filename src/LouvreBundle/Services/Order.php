@@ -11,14 +11,16 @@ namespace LouvreBundle\Services;
 
 
 // Entity
+use Doctrine\Common\Collections\ArrayCollection;
 use LouvreBundle\Entity\User;
 
 use Doctrine\ORM\EntityManager;
+use LouvreBundle\Form\BilletType;
 use LouvreBundle\Form\SearchType;
 use LouvreBundle\Form\UserType;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Bundle\TwigBundle\TwigEngine;
-
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -28,6 +30,7 @@ use Doctrine\ORM\OptimisticLockException;
 use Symfony\Component\Workflow\Workflow;
 //Stripe error
 use Stripe\Error\Card;
+use Stripe\Error;
 
 /**
  * Class Order
@@ -107,23 +110,37 @@ class Order
      */
     public function beginOrder (Request $request)
     {
+        $order = $this->session->get('order');
+        dump($order);
+
+
         try {
             if ($this->session->get('order')) {
                 $this->session->clear();
-                throw new \LogicException(
-                    sprintf (
-                        'La commande n\'est pas vide !'
-                )
+                $this->session->getFlashBag()->add(
+                    'warning',
+                    'La commande n\' est pas vide'
                 );
+
             }
         } catch (\LogicException $exception) {
             $exception->getMessage();
         }
 
-        $order = new User();
-        $order->setOrderDate(new \DateTime());
-        $form = $this->form->create(UserType::class, $order);
-        $form->handleRequest($request);
+        if ($order !== null)
+        {
+            $form = $this->form->create(UserType::class, $order);
+            $form->handleRequest($request);
+        }
+        else
+        {
+            $order = new User();
+            $order->setOrderDate(new \DateTime());
+            $form = $this->form->create(UserType::class, $order);
+            $form->handleRequest($request);
+        }
+
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $order->setNombreBillets(count($order->getBillets()));
@@ -156,10 +173,41 @@ class Order
     public function recap (Request $request)
     {
         $order = $this->session->get('order');
+        if ($order !== null)
+        {
+            $this->doctrine->persist($order);
+        }
+        else
+        {
+            $response = new RedirectResponse('/');
+            $response->send();
+            $this->session->getFlashBag()->add('fail', 'Votre commande ne peut être vide.');
+        }
         dump($order);
 
-        if ($order->getBillets() === null || $order === null || $order->getTotal($order->getBillets())) {
-            $this->session->getFlashBag()->add('fail', 'Votre commande ne peut être nulle');
+
+
+        if ($order === null)
+        {
+            $response = new RedirectResponse('/');
+            $response->send();
+            $this->session->getFlashBag()->add('fail', 'Votre commande ne peut être vide.');
+        }
+
+
+
+        if ($order->getNombreBillets() === 0 ) {
+
+            $this->session->getFlashBag()->add('fail', 'Le nombre de billets dans votre commande doit être positif.');
+        }
+
+
+
+        if ($order->getTotal($order->getBillets()) === 0)
+        {
+            $response = new RedirectResponse('/');
+            $response->send();
+            $this->session->getFlashBag()->add('fail', 'Le total de votre commande doit être supèrieur à 0.');
         }
 
 
@@ -176,9 +224,11 @@ class Order
             }
         } catch (\InvalidArgumentException $exception) {
             $exception->getMessage();
+            $response = new RedirectResponse('Accueil');
+            $response->send();
         }
 
-        $this->doctrine->persist($order);
+
 
         if ($request->isMethod('POST')) {
             $token = $request->get('stripeToken');
@@ -199,10 +249,28 @@ class Order
                     $response->send();
                 } catch (Card $exception) {
                     $exception->getMessage();
+                    $response = new RedirectResponse('Accueil');
+                    $response->send();
+                    $this->session->getFlashBag()->add(
+                        'error',
+                        'Une erreur s\'est produite avec votre carte de paiement.'
+                    );
                 } catch (\InvalidArgumentException $exception) {
                     $exception->getMessage();
+                    $response = new RedirectResponse('Accueil');
+                    $response->send();
+                    $this->session->getFlashBag()->add(
+                        'error',
+                        'Une erreur s\est produite.'
+                    );
                 } catch (OptimisticLockException $exception) {
                     $exception->getMessage();
+                    $response = new RedirectResponse('Accueil');
+                    $response->send();
+                    $this->session->getFlashBag()->add(
+                        'error',
+                        'Une erreur s\'est produite'
+                    );
                 }
                 $this->session->getFlashBag()->add(
                     'success',
@@ -212,10 +280,16 @@ class Order
 
                 $this->workflow->apply($order, 'payment');
                 try {
+                    $this->doctrine->remove($order);
                     $response = new RedirectResponse('/checkout');
                     $response->send();
+
                 } catch (\InvalidArgumentException $exception) {
                     $exception->getMessage();
+                    $this->session->getFlashBag()->add(
+                        'error',
+                        'Une erreur s\'est produite'
+                    );
                 }
             } else {
                 $this->doctrine->remove($order);
@@ -224,6 +298,10 @@ class Order
                     $response->send();
                 } catch (\InvalidArgumentException $exception) {
                     $exception->getMessage();
+                    $this->session->getFlashBag()->add(
+                        'error',
+                        'Une erreur s\'est produite'
+                    );
                 }
                 $this->session->getFlashBag()->add(
                     'warning',
@@ -271,5 +349,21 @@ class Order
             }
         }
         return $form->createView();
+    }
+
+    public function checkout (Request $request)
+    {
+        $order = $this->session->get('order');
+        dump($order);
+        if ($order != null) {
+            $this->session->clear();
+            $this->session->getFlashBag()->add('warning', 'Votre commande est maintenant terminée .');
+        }
+        elseif ($order === null) {
+            $this->session->getFlashBag()->add('warning', 'Votre commande est vide.');
+            $response = new RedirectResponse('/');
+            $response->send();
+
+        }
     }
 }

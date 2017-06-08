@@ -6,11 +6,10 @@ framework:
     session:
         storage_id: session.storage.mock_file
     profiler:
+        enabled: true
         collect: false
 
-web_profiler:
-    toolbar: false
-    intercept_redirects: false
+
 
 swiftmailer:
     disable_delivery: true

@@ -13,7 +13,9 @@ Recap:
     methods:  ['GET','POST']
     defaults: { _controller: LouvreBundle:Order:recapOrder}
 
-Come-back:
+
+
+Checkout:
     path:     /checkout
-    methods:  'GET'
-    defaults: { _controller: LouvreBundle:Order:checkout}
+    methods:  ['GET', 'POST']
+    defaults: {_controller: LouvreBundle:Order:checkout}

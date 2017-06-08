@@ -30,14 +30,22 @@ framework:
                 start:
                   from: form
                   to:   recap
+                modification:
+                  from: recap
+                  to:   form
                 payment:
                   from: recap
                   to:   come-back
+                clear:
+                  from: come-back
+                  to:   form
+                rejected:
+                  from: recap
+                  to:   form
 
 
     #esi:             ~
     default_locale: fr
-    translator:      { fallbacks: ["%locale%"] }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"

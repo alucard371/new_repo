@@ -88,9 +88,6 @@ class OrderManager
         return $orderByMail;
     }
 
-    /**
-     *
-     */
     public function postOrder ()
     {
         $order = new User();
