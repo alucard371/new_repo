@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Validator\Constraints\Count;
@@ -62,6 +64,19 @@ class UserType extends AbstractType
                 'label'     => 'Demi-journée',
                 'required'  => false,]);
 
+        /**
+         * $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event)
+        {
+            $user = $event->getData();
+            $form = $event->getForm();
+            $now = date('H');
+
+            if ($now >= 14 && $now <= 20)
+            {
+                $form->remove('demiJournee');
+            }
+        });
+         * */
 
         $builder->add('billets', CollectionType::class, [
                 'constraints'   =>

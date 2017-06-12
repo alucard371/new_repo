@@ -36,6 +36,7 @@ services:
   order:
           class: LouvreBundle\Services\Order
           arguments:
+              - '@order_manager'
               - '@doctrine.orm.entity_manager'
               - '@session'
               - '@form.factory'

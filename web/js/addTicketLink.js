@@ -1,7 +1,7 @@
 var $collectionHolder;
 
 // setup an "add a ticket" link
-var $addTicketLink = $('<a href="#"  class="add_ticket_link"><button onclick="show()" class="btn btn-default">Ajouter un billet</button></a>');
+var $addTicketLink = $('<a href="#"  class="add_ticket_link"><button onclick="show()" id="addTicket" class="btn btn-default">Ajouter un billet</button></a>');
 var $newLinkLi = $('<li class="list-unstyled"></li>').append($addTicketLink);
 
 $(document).ready(function() {

@@ -39,3 +39,8 @@ ol.text-center.breadcrumb
 {
     padding-left: 0 !important;
 }
+
+button.stripe-button-el:first-of-type
+{
+    display: none;
+}

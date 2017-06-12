@@ -12,6 +12,13 @@
         });
     });
 </script>
-
+<script>
+    var dateVisit = document.getElementById('louvrebundle_user_dateDeVenue');
+    dateVisit.addEventListener('select', function () {
+        var date = $('#louvrebundle_user_dateDeVenue').datepicker('getDate');
+        console.log(date.toLocaleDateString('fr'));
+        console.log(new Date(date.toLocaleDateString()));
+    })
+</script>
 
 

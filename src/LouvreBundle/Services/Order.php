@@ -13,14 +13,14 @@ namespace LouvreBundle\Services;
 // Entity
 use Doctrine\Common\Collections\ArrayCollection;
 use LouvreBundle\Entity\User;
-
+use LouvreBundle\Manager\OrderManager;
 use Doctrine\ORM\EntityManager;
-use LouvreBundle\Form\BilletType;
+
 use LouvreBundle\Form\SearchType;
 use LouvreBundle\Form\UserType;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Bundle\TwigBundle\TwigEngine;
-use Symfony\Component\Form\FormView;
+
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -30,7 +30,7 @@ use Doctrine\ORM\OptimisticLockException;
 use Symfony\Component\Workflow\Workflow;
 //Stripe error
 use Stripe\Error\Card;
-use Stripe\Error;
+
 
 /**
  * Class Order
@@ -38,6 +38,11 @@ use Stripe\Error;
  */
 class Order
 {
+    /**
+     * @var OrderManager
+     */
+    protected $orderManager;
+
     /**
      * @var EntityManager
      */
@@ -75,6 +80,7 @@ class Order
 
     /**
      * Commande constructor.
+     * @param OrderManager $orderManager
      * @param EntityManager $doctrine
      * @param Session $session
      * @param FormFactory $form
@@ -84,6 +90,7 @@ class Order
      * @param Workflow $workflow
      */
     public function __construct (
+        OrderManager    $orderManager,
         EntityManager   $doctrine,
         Session         $session,
         FormFactory     $form,
@@ -93,6 +100,7 @@ class Order
         Workflow        $workflow
     )
     {
+        $this->orderManager = $orderManager;
         $this->doctrine     = $doctrine;
         $this->session      = $session;
         $this->form         = $form;
@@ -111,8 +119,6 @@ class Order
     public function beginOrder (Request $request)
     {
         $order = $this->session->get('order');
-        dump($order);
-
 
         try {
             if ($this->session->get('order')) {
@@ -140,17 +146,15 @@ class Order
             $form->handleRequest($request);
         }
 
-
-
         if ($form->isSubmitted() && $form->isValid()) {
             $order->setNombreBillets(count($order->getBillets()));
+            if ( $order->isDemiJournee() === null)
+            {
+                $order->setDemiJournee(false);
+            }
+
             $data = $form->getData();
             $this->session->set('order', $data);
-
-                $this->session->getFlashBag()->add(
-                    'success',
-                    'Votre commande est enregistrée'
-                );
 
 
             //transition for the start phase
@@ -158,6 +162,7 @@ class Order
             try {
                 $response = new RedirectResponse('/recapitulatif');
                 $response->send();
+
             } catch (\InvalidArgumentException $exception) {
                 $exception->getMessage();
             }
@@ -173,9 +178,29 @@ class Order
     public function recap (Request $request)
     {
         $order = $this->session->get('order');
+        $numberTickets = $this->orderManager->getTicketsByDate($order->getDateDeVenue());
+        dump($numberTickets);
+
+
+
         if ($order !== null)
         {
-            $this->doctrine->persist($order);
+            if (($numberTickets + $order->getNombreBillets()) < 1000)
+            {
+                $this->doctrine->persist($order);
+                $this->session->getFlashBag()->add(
+                    'success',
+                    'Votre commande est enregistrée'
+                );
+            }
+            else if (  (($numberTickets + $order->getNombreBillets()) > 1000) {
+            $this->session->getFlashBag()->add(
+                'attention',
+                'Le maximum de billets vendu ne peut dépasser 1000 unités.
+                             Veuillez sélectionner un autre jour pour votre visite.'
+            )
+            });
+
         }
         else
         {
@@ -183,9 +208,12 @@ class Order
             $response->send();
             $this->session->getFlashBag()->add('fail', 'Votre commande ne peut être vide.');
         }
+
+        dump(($numberTickets + $order->getNombreBillets()));
+
+
+
         dump($order);
-
-
 
         if ($order === null)
         {
@@ -194,14 +222,10 @@ class Order
             $this->session->getFlashBag()->add('fail', 'Votre commande ne peut être vide.');
         }
 
-
-
         if ($order->getNombreBillets() === 0 ) {
 
             $this->session->getFlashBag()->add('fail', 'Le nombre de billets dans votre commande doit être positif.');
         }
-
-
 
         if ($order->getTotal($order->getBillets()) === 0)
         {
@@ -209,26 +233,6 @@ class Order
             $response->send();
             $this->session->getFlashBag()->add('fail', 'Le total de votre commande doit être supèrieur à 0.');
         }
-
-
-        try {
-
-            if (  count($order->getBillets()) > 1000) {
-                $response = new RedirectResponse('/');
-                $response->send();
-                $this->session->getFlashBag()->add(
-                    'warning',
-                    'Le maximum de billets vendu ne peut dépasser 1000 unités.
-                             Veuillez sélectionner un autre jour pour votre visite.'
-                );
-            }
-        } catch (\InvalidArgumentException $exception) {
-            $exception->getMessage();
-            $response = new RedirectResponse('Accueil');
-            $response->send();
-        }
-
-
 
         if ($request->isMethod('POST')) {
             $token = $request->get('stripeToken');
@@ -327,6 +331,8 @@ class Order
             $order = $this->doctrine->getRepository('LouvreBundle:User')
                 ->findOneBy(['email'=>$search['email']]);
 
+
+
             if($order)
             {
                 $this->session->getFlashBag()->add(
@@ -351,6 +357,9 @@ class Order
         return $form->createView();
     }
 
+    /**
+     * @param Request $request
+     */
     public function checkout (Request $request)
     {
         $order = $this->session->get('order');

@@ -52,8 +52,6 @@ class OrderController extends Controller
      */
     public function recapOrderAction(Request $request)
     {
-
-
         $recap = $this->get('order')->recap($request);
 
         $nombreTickets =  $this->get('order_manager')->getTicketsByDate($recap->getDateDeVenue());

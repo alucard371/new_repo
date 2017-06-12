@@ -2,7 +2,7 @@
     {% if app.request.get('_route') == 'Accueil'%}
         <div class="form-group">
             <div class="form-group text-center">
-                <button type="submit" class="align-center btn btn-default">Rechercher</button>
+                <button type="submit" class="align-center btn btn-default" id="searchSubmit">Rechercher</button>
             </div>
         </div>
     {% elseif app.request.get('_route') == 'Recap' %}
@@ -11,6 +11,7 @@
                 <form action="" method="POST">
                     <script
                             src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            id="test"
                             data-key="{{ key }}"
                             data-amount="{{ grandTotal * 100 }}"
                             data-label="Régler la commande"
@@ -21,6 +22,9 @@
                             data-locale="fr"
                             data-zip-code="false">
                     </script>
+                    <button id="customButton" class="stripe-button-el">
+                        <span style="display: block; min-height: 30px;">Régler la commande</span>
+                    </button>
                 </form>
             </div>
         </div>
