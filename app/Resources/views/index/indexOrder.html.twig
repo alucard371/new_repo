@@ -44,16 +44,28 @@
 
 {% block content %}
 
-    {% for clear in app.session.flashbag.get('clear') %}
-        <div class="alert alert-info alert-dismissible text-center" role="alert">
-            <button class="close" data-dismiss="alert" aria-label="close">
-                <span aria-hidden="true">X</span>
-            </button>
-            <h3>{{ clear }}</h3>
-        </div>
-    {% endfor %}
+    {#
+If the form is not valid then :
+Note: in this case the form variable is : form
+ #}
+    {% if not form.vars.valid %}
+        <ul>
+            {# Loop through every form item #}
+            {% for child in form.children %}
+                {# Display the errors of the form item #}
+                {%for error in child.vars.errors%}
+                    <h2><li class="text-warning  list-unstyled" >{{error.message}}</li></h2>
+                {%endfor%}
+            {%endfor%}
+        </ul>
+    {%endif%}
 
-    <h3 class="text-center">Il reste actuellement {{ 1000 - tickets }} tickets disponible pour aujourd'hui.</h3>
+    {% if (1000 - tickets) <= 0  %}
+        <h3 class="text-center">Il ne reste actuellement plus de tickets disponible pour aujourd'hui.</h3>
+    {% else %}
+        <h3 class="text-center">Il reste actuellement {{ 1000 - tickets }} tickets disponible pour aujourd'hui.</h3>
+    {% endif %}
+
     <div class="text-center"><button type="button" class="btn btn-primary" data-target="#myModal" data-toggle="modal">Annuler la commande</button></div>
 
 
@@ -91,13 +103,11 @@
                 </div>
                 <div class="text-center col-xs-12 col-md-4 col-lg-4 col-sm-4">
                     <div class="form-group">
-                        {{ form_errors(form.dateDeVenue) }}
                         {{ form_widget(form.dateDeVenue, {'attr': {'class':'text-center form-control', 'placeholder':'Date de la visite'}}) }}
                     </div>
                 </div>
                 <div class="text-center col-xs-12 col-sm-4 col-lg-4">
                     <div class="form-group">
-                        {{ form_errors(form.demiJournee) }}
                         {{ form_widget(form.demiJournee, {'attr': {'class':'text-center form-control'}}) }}
                         {{ form_label(form.demiJournee) }}
                     </div>
@@ -152,19 +162,5 @@
 {% block javascripts %}
 {{ parent() }}
 <script src="{{ asset('js/addTicketLink.js') }}"></script>
-<script>
-    $(function(){
-        $("#louvrebundle_user_demiJournee").click(function () {
-            var ele = $(this).find('louvrebundle_user_demiJournee');
-            if ($(':checked').length) {
-                ele.prop('checked', false);
-                $(".message").append("<p><bold>Il est impossible de commander un billet demi journée après 14 heures.</bold></p>");
-                $("bold").addClass('info');
-            } else {
-                ele.prop('checked', true);
-                $("bold.info").remove();
-            }
-        });
-    });
-</script>
+
 {% endblock %}

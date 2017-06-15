@@ -3,14 +3,13 @@
 namespace LouvreBundle\Form;
 
 use LouvreBundle\Entity\User;
-use LouvreBundle\Validators\DemiJournee;
+use LouvreBundle\Validators\JourFeries;
+use LouvreBundle\Validators\JourFermes;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Validator\Constraints\Count;
@@ -39,12 +38,16 @@ class UserType extends AbstractType
                 'constraints' =>
                     [
                         new NotBlank(),
-                        new DemiJournee()
+                        new JourFermes(),
+                        new JourFeries(),
                     ],
                 'view_timezone' => 'Europe/Paris',
                 'label'     => 'Date de la visite',
                 'widget'    => 'single_text',
                 'format'    => 'dd-MM-yyyy',
+                'years'     => range(date('Y'), date('Y')+5),
+                'months'     => range(date('M'), date('M')+12),
+                'days'     => range(date('d'), date('d')+7),
                 'html5'     => false,
                 'attr'      => [
                     'class'                             => 'dateDeVenue',
@@ -60,23 +63,10 @@ class UserType extends AbstractType
                                                             '05/06/2017', '14/07/2017', '15/08/2017', '11/11/2017',
                                                             '25/12/2017'
                 ]])
-            ->add('demiJournee', CheckboxType::class, [
+            ->add('demiJournee', CheckboxType::class,
+                [
                 'label'     => 'Demi-journée',
                 'required'  => false,]);
-
-        /**
-         * $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event)
-        {
-            $user = $event->getData();
-            $form = $event->getForm();
-            $now = date('H');
-
-            if ($now >= 14 && $now <= 20)
-            {
-                $form->remove('demiJournee');
-            }
-        });
-         * */
 
         $builder->add('billets', CollectionType::class, [
                 'constraints'   =>

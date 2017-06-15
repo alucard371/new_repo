@@ -29,7 +29,7 @@ class DemiJourneeValidator extends ConstraintValidator
 
         $reservation = date('H', $value->getTimeStamp());
 
-        if ($reservation < $now && $reservation > 14)
+        if ($reservation < $now && $reservation < 14)
         {
             $this->context->buildViolation($constraint->message)
                  ->addViolation();

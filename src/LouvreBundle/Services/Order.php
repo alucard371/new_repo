@@ -124,7 +124,7 @@ class Order
             if ($this->session->get('order')) {
                 $this->session->clear();
                 $this->session->getFlashBag()->add(
-                    'warning',
+                    'beware',
                     'La commande n\' est pas vide'
                 );
 
@@ -190,7 +190,7 @@ class Order
                 $this->doctrine->persist($order);
                 $this->session->getFlashBag()->add(
                     'success',
-                    'Votre commande est enregistrée'
+                    'Votre commande est validée'
                 );
             }
             else if (  (($numberTickets + $order->getNombreBillets()) > 1000) {
@@ -219,19 +219,19 @@ class Order
         {
             $response = new RedirectResponse('/');
             $response->send();
-            $this->session->getFlashBag()->add('fail', 'Votre commande ne peut être vide.');
+            $this->session->getFlashBag()->add('empty', 'Votre commande ne peut être vide.');
         }
 
         if ($order->getNombreBillets() === 0 ) {
 
-            $this->session->getFlashBag()->add('fail', 'Le nombre de billets dans votre commande doit être positif.');
+            $this->session->getFlashBag()->add('positiveInt', 'Le nombre de billets dans votre commande doit être positif.');
         }
 
         if ($order->getTotal($order->getBillets()) === 0)
         {
             $response = new RedirectResponse('/');
             $response->send();
-            $this->session->getFlashBag()->add('fail', 'Le total de votre commande doit être supèrieur à 0.');
+            $this->session->getFlashBag()->add('greaterThan0', 'Le total de votre commande doit être supèrieur à 0.');
         }
 
         if ($request->isMethod('POST')) {
@@ -256,7 +256,7 @@ class Order
                     $response = new RedirectResponse('Accueil');
                     $response->send();
                     $this->session->getFlashBag()->add(
-                        'error',
+                        'stripeError',
                         'Une erreur s\'est produite avec votre carte de paiement.'
                     );
                 } catch (\InvalidArgumentException $exception) {
@@ -264,7 +264,7 @@ class Order
                     $response = new RedirectResponse('Accueil');
                     $response->send();
                     $this->session->getFlashBag()->add(
-                        'error',
+                        'invalid',
                         'Une erreur s\est produite.'
                     );
                 } catch (OptimisticLockException $exception) {
@@ -272,13 +272,13 @@ class Order
                     $response = new RedirectResponse('Accueil');
                     $response->send();
                     $this->session->getFlashBag()->add(
-                        'error',
+                        'optimistic',
                         'Une erreur s\'est produite'
                     );
                 }
                 $this->session->getFlashBag()->add(
-                    'success',
-                    'Votre commande à bien été enregistrée'
+                    'payment',
+                    'Votre règlement est pris en compte.'
                 );
                 //transition for the payment phase
 
@@ -291,7 +291,7 @@ class Order
                 } catch (\InvalidArgumentException $exception) {
                     $exception->getMessage();
                     $this->session->getFlashBag()->add(
-                        'error',
+                        'wrong',
                         'Une erreur s\'est produite'
                     );
                 }
@@ -303,7 +303,7 @@ class Order
                 } catch (\InvalidArgumentException $exception) {
                     $exception->getMessage();
                     $this->session->getFlashBag()->add(
-                        'error',
+                        'invalidArg',
                         'Une erreur s\'est produite'
                     );
                 }
@@ -357,19 +357,16 @@ class Order
         return $form->createView();
     }
 
-    /**
-     * @param Request $request
-     */
-    public function checkout (Request $request)
+    public function checkout ()
     {
         $order = $this->session->get('order');
         dump($order);
         if ($order != null) {
             $this->session->clear();
-            $this->session->getFlashBag()->add('warning', 'Votre commande est maintenant terminée .');
+            $this->session->getFlashBag()->add('clearOrder', 'Votre commande est maintenant terminée .');
         }
-        elseif ($order === null) {
-            $this->session->getFlashBag()->add('warning', 'Votre commande est vide.');
+        else {
+            $this->session->getFlashBag()->add('emptyOrder', 'Votre commande est vide.');
             $response = new RedirectResponse('/');
             $response->send();
 

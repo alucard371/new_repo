@@ -7,7 +7,7 @@ Feature: Order
   Scenario: Order tickets to visit Le Louvre
     Given   I am on "/"
     When    I fill in "Email" with "balohe37@gmail.com"
-    And     I fill in "Date de la visite" with "12/O6/2017"
+    And     I fill in "Date de la visite" with "13/O6/2017"
     And     I press "addTicket"
     And     I fill in "Nom" with "moi"
     And     I fill in "Prénom" with "même"

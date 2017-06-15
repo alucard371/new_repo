@@ -4,7 +4,9 @@ namespace LouvreBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use LouvreBundle\Validators\DemiJournee;
 use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * User
@@ -44,6 +46,10 @@ class User
     protected $billets;
 
     /**
+     * @Assert\GreaterThanOrEqual(
+     *     value = 1000,
+     *     message="On ne peut pas dépasser le nombre de 1000 billets vendu par commande."
+     *     )
      * @ORM\Column(name="nombre_billets", type="integer")
      * @var integer
      */

@@ -114,7 +114,7 @@ class Billet
     public function setTarif ($age, $reduit)
     {
         switch ($age) {
-            case ( $age<4 ):
+            case (  $age>0 && $age < 4 ):
                 $this->tarif = "gratuit";
                 break;
             case ($age>=4 && $age <= 12):

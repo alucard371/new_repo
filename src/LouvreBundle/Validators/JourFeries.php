@@ -2,25 +2,20 @@
 /**
  * Created by PhpStorm.
  * User: moi
- * Date: 01/06/2017
- * Time: 10:20
+ * Date: 13/06/2017
+ * Time: 10:49
  */
 
 namespace LouvreBundle\Validators;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class DemiJournee
- * @Annotation
+ * Class JourFeries
  * @package LouvreBundle\Validators
  */
-class DemiJournee extends Constraint
+class JourFeries extends Constraint
 {
-
-    /**
-     * @var string
-     */
-    public $message = "Il est impossible de choisir le tarif journée après 14h !";
+    public $message = "On ne peut pas selectionner un jour ferié.";
 
     /**
      * @return string

@@ -33,6 +33,7 @@ class OrderController extends Controller
         $order = $this->get('order')->searchOrder($request);
 
         $nombreTickets = $this->get('order_manager')->getTicketsByDate(new \DateTime());
+        dump($nombreTickets);
 
         return $this->render('index/indexOrder.html.twig', [
             'tickets'   => $nombreTickets,

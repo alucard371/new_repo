@@ -47,6 +47,11 @@
                 <div class="col-lg-4 col-xs-12 col-md-4 col-sm-4">
                     <div class="transparent panel panel-default text-center">
                         <div class="panel-heading">Votre commande</div>
+                        {% if grandTotal  > 0 %}
+                            {% include('panel/panel.html.twig') %}
+                        {% else %}
+                            <p class="help-block">Il est impossible de valider une commande d'une valeur de 0 euro.</p>
+                        {% endif %}
                         <div class="panel-body transparent">
                             <h3>Total de la commande : {{ grandTotal }} euros</h3><br>
                             <h3>Nombre de billets : {{ billetTotal }}</h3>
@@ -56,11 +61,7 @@
                                     <p class="help-block">Le tarif réduit est octroyé sous reserve de présentation d'un justificatif (étudiant, employé de musée, Ministère de la culture, militaire, ...)</p>
                             </section>
                         </div>
-                        {% if grandTotal  > 0 %}
-                            {% include('panel/panel.html.twig') %}
-                        {% else %}
-                            <p class="help-block">Il est impossible de valider une commande d'une valeur de 0 euro.</p>
-                        {% endif %}
+
                         <a href="{{ path('Accueil') }}"><button id="back" class="btn btn-primary">Revenir en arrière</button></a>
                     </div>
                 </div>
