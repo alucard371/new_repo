@@ -46,10 +46,6 @@ class User
     protected $billets;
 
     /**
-     * @Assert\GreaterThanOrEqual(
-     *     value = 1000,
-     *     message="On ne peut pas dépasser le nombre de 1000 billets vendu par commande."
-     *     )
      * @ORM\Column(name="nombre_billets", type="integer")
      * @var integer
      */
@@ -285,15 +281,7 @@ class User
      */
     public function setDemiJournee (bool $demiJournee)
     {
-        $now = date("H");
-
-        if ( $now >= 14 && $now <= 20 )
-        {
-            $this->demiJournee = true;
-        } else
-        {
             $this->demiJournee = $demiJournee;
-        }
     }
 
     /**

@@ -5,6 +5,7 @@ namespace LouvreBundle\Form;
 use LouvreBundle\Entity\User;
 use LouvreBundle\Validators\JourFeries;
 use LouvreBundle\Validators\JourFermes;
+use LouvreBundle\Validators\TropDeTickets;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -40,6 +41,7 @@ class UserType extends AbstractType
                         new NotBlank(),
                         new JourFermes(),
                         new JourFeries(),
+                        new TropDeTickets(),
                     ],
                 'view_timezone' => 'Europe/Paris',
                 'label'     => 'Date de la visite',
@@ -65,7 +67,6 @@ class UserType extends AbstractType
                 ]])
             ->add('demiJournee', CheckboxType::class,
                 [
-                'label'     => 'Demi-journée',
                 'required'  => false,]);
 
         $builder->add('billets', CollectionType::class, [

@@ -64,7 +64,7 @@ class AddTickets
         {
             $em = $this->getDoctrine()->getManager();
             $user->addBillets($user->getBillets());
-            $this->session->getFlashBag()->add('success', 'Votre commande à bien été envoyée');
+            $this->session->getFlashBag()->add('okay', 'Votre commande à bien été envoyée');
             $em->persist($user);
             $em->flush();
 

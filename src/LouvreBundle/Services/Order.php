@@ -119,13 +119,17 @@ class Order
     public function beginOrder (Request $request)
     {
         $order = $this->session->get('order');
+        $session = new Session();
+
+        dump($session);
+        dump($order);
 
         try {
             if ($this->session->get('order')) {
                 $this->session->clear();
                 $this->session->getFlashBag()->add(
                     'beware',
-                    'La commande n\' est pas vide'
+                    'La commande n\' est pas vide.'
                 );
 
             }
@@ -217,9 +221,10 @@ class Order
 
         if ($order === null)
         {
+            $this->session->getFlashBag()->add('empty', 'Votre commande ne peut être vide.');
             $response = new RedirectResponse('/');
             $response->send();
-            $this->session->getFlashBag()->add('empty', 'Votre commande ne peut être vide.');
+
         }
 
         if ($order->getNombreBillets() === 0 ) {
@@ -229,10 +234,12 @@ class Order
 
         if ($order->getTotal($order->getBillets()) === 0)
         {
+            $this->session->getFlashBag()->add('greaterThan0', 'Le total de votre commande doit être supèrieur à 0.');
             $response = new RedirectResponse('/');
             $response->send();
-            $this->session->getFlashBag()->add('greaterThan0', 'Le total de votre commande doit être supèrieur à 0.');
         }
+
+
 
         if ($request->isMethod('POST')) {
             $token = $request->get('stripeToken');

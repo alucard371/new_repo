@@ -4,6 +4,8 @@ parameters:
 #    parameter_name: value
 
 services:
+
+
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
@@ -44,3 +46,10 @@ services:
               - '@mailer'
               - '@stripe'
               - '@workflow.billeterie'
+
+  louvre.billet.validator.tickets:
+          class: LouvreBundle\Validators\TropDeTicketsValidator
+          arguments:
+              - '@order_manager'
+          tags:
+              - { name: validator.constraint_validator }

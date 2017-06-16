@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class OrderManager
 {
+
     /**
      * @var EntityManager
      */
@@ -33,7 +34,7 @@ class OrderManager
      * @param EntityManager $doctrine
      * @param RequestStack $request
      */
-    public function __construct (EntityManager $doctrine, RequestStack $request)
+    public function __construct ( EntityManager $doctrine, RequestStack $request)
 {
     $this->doctrine = $doctrine;
     $this->request  = $request;

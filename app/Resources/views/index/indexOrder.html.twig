@@ -6,13 +6,13 @@
         <div class="row">
             <div class="col-xs-12 col-md-6 col-lg-6 col-sm-6">
                 <div class="form-group">
-                    {{ form_errors(billet.nom) }}
+                    <h6 class="text-center text-warning">{{ form_errors(billet.nom) }}</h6>
                     {{ form_widget(billet.nom, {'attr': {'class':'text-center form-control', 'placeholder':'Nom'}}) }}
                 </div>
             </div>
             <div class="col-xs-12 col-md-6 col-lg-6 col-sm-6">
                 <div class="form-group">
-                    {{ form_errors(billet.prenom) }}
+                    <h6 class="text-center text-warning">{{ form_errors(billet.prenom) }}</h6>
                     {{ form_widget(billet.prenom, {'attr': {'class':'text-center form-control', 'placeholder':'Prénom'}}) }}
                 </div>
             </div>
@@ -20,13 +20,13 @@
         <div class="row">
             <div class="col-xs-12 col-md-6 col-lg-6 col-sm-6">
                 <div class="form-group">
-                    {{ form_errors(billet.birthdate) }}
+                    <h6 class="text-center text-warning">{{ form_errors(billet.birthdate) }}</h6>
                     {{ form_widget(billet.birthdate, {'attr': {'class':'text-center form-control', 'placeholder':'Date de naissance'}}) }}
                 </div>
             </div>
             <div class="col-xs-12 col-md-4 col-lg-6 col-sm-6">
                 <div class="form-group">
-                    {{ form_errors(billet.pays) }}
+                    <h6 class="text-center text-warning">{{ form_errors(billet.pays) }}</h6>
                     {{ form_widget(billet.pays, {'attr': {'class':'form-control', 'value':'Pays'}}) }}
                 </div>
             </div>
@@ -34,7 +34,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-lg-12">
                 <div class="text-center form-group">
-                    {{ form_errors(billet.tarifReduit) }}
+                    <h6 class="text-center text-warning">{{ form_errors(billet.tarifReduit) }}</h6>
                     {{ form_widget(billet.tarifReduit, {'attr': {'class':'text-center form-control', 'placeholder':'Tarif Réduit'}}) }}
                     {{ form_label(billet.tarifReduit) }}
                 </div>
@@ -54,7 +54,7 @@ Note: in this case the form variable is : form
             {% for child in form.children %}
                 {# Display the errors of the form item #}
                 {%for error in child.vars.errors%}
-                    <h2><li class="text-warning  list-unstyled" >{{error.message}}</li></h2>
+                    <h4 class="text-center"><li class="text-warning  list-unstyled" >{{error.message}}</li></h4>
                 {%endfor%}
             {%endfor%}
         </ul>
@@ -62,11 +62,13 @@ Note: in this case the form variable is : form
 
     {% if (1000 - tickets) <= 0  %}
         <h3 class="text-center">Il ne reste actuellement plus de tickets disponible pour aujourd'hui.</h3>
+        <h3 class="text-center">Veuillez selectionner une date différente.</h3>
     {% else %}
         <h3 class="text-center">Il reste actuellement {{ 1000 - tickets }} tickets disponible pour aujourd'hui.</h3>
     {% endif %}
 
     <div class="text-center"><button type="button" class="btn btn-primary" data-target="#myModal" data-toggle="modal">Annuler la commande</button></div>
+    <br>
 
 
     <!-- Modal -->
@@ -91,6 +93,7 @@ Note: in this case the form variable is : form
     </div>
 
     {{ form_start(form) }}
+    <h3 class="text-center text-warning">{{ form_errors(form) }}</h3>
 <div class="container">
     <div class="row">
         <div class="col-lg-8  col-md-8 col-sm-8 col-xs-12">
@@ -144,8 +147,9 @@ Note: in this case the form variable is : form
                         </div>
                     </div>
                      {{ form_start(order) }}
+                        <h3 class="text-center text-warning">{{ form_errors(order) }}</h3>
                             <div class="form-group">
-                                {{ form_errors(order.email) }}
+                                <h6 class="text-center text-warning">{{ form_errors(order.email) }}</h6>
                                 {{ form_widget(order.email, {'attr': {'class': 'text-center form-control','placeholder': 'Récuperation'}}) }}
                             </div>
                             <p class="help-block">En cas de perte de votre mail de confirmation retrouvez le en renseignant ici l'adresse email utilisé pour votre commande.</p>
