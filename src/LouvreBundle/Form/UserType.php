@@ -3,6 +3,7 @@
 namespace LouvreBundle\Form;
 
 use LouvreBundle\Entity\User;
+use LouvreBundle\Validators\DemiJournee;
 use LouvreBundle\Validators\JourFeries;
 use LouvreBundle\Validators\JourFermes;
 use LouvreBundle\Validators\TropDeTickets;
@@ -42,6 +43,7 @@ class UserType extends AbstractType
                         new JourFermes(),
                         new JourFeries(),
                         new TropDeTickets(),
+                        new DemiJournee(),
                     ],
                 'view_timezone' => 'Europe/Paris',
                 'label'     => 'Date de la visite',

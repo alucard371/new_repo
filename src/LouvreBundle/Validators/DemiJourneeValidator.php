@@ -20,20 +20,28 @@ class DemiJourneeValidator extends ConstraintValidator
  *
  * Checks if the passed value is valid.
  *
- * @param mixed $value The value that should be validated
- * @param Constraint $constraint The constraint for the validation
+ * @param boolean $value
+ * @param Constraint $constraint
  */
     public function validate ($value, Constraint $constraint)
     {
         $now = new \DateTime();
+        $today = $now->format('D.m');
 
         $reservation = date('H', $value->getTimeStamp());
 
-        if ($reservation < $now && $reservation < 14)
+        $day = date('D.m', $value->getTimeStamp());
+
+        if ($day === $today)
         {
-            $this->context->buildViolation($constraint->message)
-                 ->addViolation();
+            if ($reservation < $now && $reservation < 14)
+            {
+                $this->context->buildViolation($constraint->message)
+                    ->addViolation();
+            }
         }
+
+
     }
 
 
