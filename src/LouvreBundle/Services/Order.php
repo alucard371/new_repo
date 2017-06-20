@@ -194,7 +194,7 @@ class Order
                 $this->doctrine->persist($order);
                 $this->session->getFlashBag()->add(
                     'success',
-                    'Votre commande est validée'
+                    'Votre commande est prête à être enregistrée'
                 );
             }
             else if (  (($numberTickets + $order->getNombreBillets()) > 1000) {
@@ -230,6 +230,8 @@ class Order
         if ($order->getNombreBillets() === 0 ) {
 
             $this->session->getFlashBag()->add('positiveInt', 'Le nombre de billets dans votre commande doit être positif.');
+            $response = new RedirectResponse('/');
+            $response->send();
         }
 
         if ($order->getTotal($order->getBillets()) === 0)
